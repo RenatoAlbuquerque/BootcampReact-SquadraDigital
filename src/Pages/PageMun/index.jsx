@@ -2,19 +2,17 @@ import React from "react";
 import {
   Header,
   Footer,
-  FormRegisterUF,
-  ListUF,
+  FormRegisterMUN
 } from "../../Components";
 
 
-const Home = () => {
+const PageMun = () => {
   return (
     <>
       <Header />
-      <FormRegisterUF/>
-      <ListUF/>
+      <FormRegisterMUN/>
       <Footer />
     </>
   );
 };
-export default Home;
+export default PageMun;

@@ -4,7 +4,7 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import SaveBtn from "../BtnSave";
 
-const FormRegisterUF = () => {
+const FormRegisterMUN = () => {
   const handleRegister = async (values, actions) => {
     console.log(values);
   };
@@ -13,7 +13,7 @@ const FormRegisterUF = () => {
     <div className="mt-4">
       <div className="flex flex-col  items-center shadow-2xl px-4 py-4 bg-gray-700">
         <h1 className="font-sans text-4xl font-bold text-white mb-10">
-          CRIAR UF
+          CRIAR MUNICÍPIO
         </h1>
         <div>
           <Formik
@@ -21,7 +21,7 @@ const FormRegisterUF = () => {
             onSubmit={handleRegister}
             initialValues={{
               nome: "",
-              sigla: "",
+              uf: "",
               status: "",
             }}
           >
@@ -42,16 +42,20 @@ const FormRegisterUF = () => {
                 </div>
                 <div className="flex flex-col">
                   <div>
-                    <p className="text-white font-bold">Sigla</p>
+                    <p className="text-white font-bold">UF</p>
                     <Field
-                      name="sigla"
-                      type="text"
-                      className=" rounded-lg  appearance-none border border-gray-300 w-full py-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
-                    />
+                      component="select"
+                      name="uf"
+                      className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                    >
+                      <option>SELECIONE</option>
+                      <option value="1">PE</option>
+                      <option value="2">RN</option>
+                    </Field>
                   </div>
-                  <span className="spanValidateForm">
-                    <ErrorMessage name="sigla" />
-                  </span>
+                    <span className="spanValidateForm">
+                      <ErrorMessage name="uf" />
+                    </span>
                 </div>
                 <div className="flex flex-col">
                   <div>
@@ -62,19 +66,21 @@ const FormRegisterUF = () => {
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
-                      <option value="1">ATIVADO</option>
-                      <option value="2">DESATIVADO</option>
+                      <option value={1}>ATIVADO</option>
+                      <option value={2}>DESATIVADO</option>
                     </Field>
                   </div>
-                  <span className="spanValidateForm">
-                    <ErrorMessage name="status" />
-                  </span>
+                    <span className="spanValidateForm">
+                      <ErrorMessage name="status" />
+                    </span>
+                  
                 </div>
                 <div className="flex flex-col">
                   <SaveBtn />
                   <span className="spanValidateForm">
-                  </span>
+                    </span>
                 </div>
+                
               </Form>
             )}
           </Formik>
@@ -84,4 +90,4 @@ const FormRegisterUF = () => {
   );
 };
 
-export default FormRegisterUF;
+export default FormRegisterMUN;

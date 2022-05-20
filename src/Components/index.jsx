@@ -5,6 +5,7 @@ export { default as Footer } from "./Footer";
 
 //Formulários de Registro
 export { default as FormRegisterUF } from "./FormRegisterUF";
+export { default as FormRegisterMUN } from "./FormRegisterMUN";
 //Listas de Renderização
 export { default as ListUF } from "./ListUF";
 
