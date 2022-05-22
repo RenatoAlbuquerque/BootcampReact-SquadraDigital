@@ -1,0 +1,18 @@
+{
+  "uf": [
+    {
+      "cod": 2,
+      "nome": "São Paulo",
+      "sigla": "SP",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "cod": 3,
+      "nome": "Pernambuco",
+      "sigla": "PE",
+      "status": 1,
+      "id": 3
+    }
+  ]
+}

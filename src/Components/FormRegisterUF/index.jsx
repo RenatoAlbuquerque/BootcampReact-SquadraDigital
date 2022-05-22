@@ -3,10 +3,15 @@ import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import SaveBtn from "../BtnSave";
+import { api } from "../../Services/api";
 
 const FormRegisterUF = () => {
-  const handleRegister = async (values, actions) => {
-    console.log(values);
+  const handleRegister = async (envio, actions) => {
+    try {
+      await api.post('/uf', envio)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -22,7 +27,7 @@ const FormRegisterUF = () => {
             initialValues={{
               nome: "",
               sigla: "",
-              status: "",
+              status: 0,
             }}
           >
             {({ errors, touched, isValid, handleChange, handleBlur }) => (
@@ -62,8 +67,8 @@ const FormRegisterUF = () => {
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
-                      <option value="1">ATIVADO</option>
-                      <option value="2">DESATIVADO</option>
+                      <option value={1}>ATIVADO</option>
+                      <option value={2}>DESATIVADO</option>
                     </Field>
                   </div>
                   <span className="spanValidateForm">
@@ -71,7 +76,7 @@ const FormRegisterUF = () => {
                   </span>
                 </div>
                 <div className="flex flex-col">
-                  <SaveBtn />
+                  <SaveBtn type="submit"/>
                   <span className="spanValidateForm">
                   </span>
                 </div>

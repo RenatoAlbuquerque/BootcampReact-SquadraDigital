@@ -22,7 +22,7 @@ const FormRegisterMUN = () => {
             initialValues={{
               nome: "",
               uf: "",
-              status: "",
+              status: 0,
             }}
           >
             {({ errors, touched, isValid, handleChange, handleBlur }) => (
