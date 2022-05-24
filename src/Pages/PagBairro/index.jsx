@@ -2,17 +2,19 @@ import React from "react";
 import {
   Header,
   Footer,
-  FormRegisterMUN
+  FormRegisterBAIRRO,
+  ListaBAIRRO
 } from "../../Components";
 
 
-const PageMun = () => {
+const PagBairro = () => {
   return (
     <>
       <Header />
-      <FormRegisterMUN/>
+      <FormRegisterBAIRRO/>
+      <ListaBAIRRO/>
       <Footer />
     </>
   );
 };
-export default PageMun;
+export default PagBairro;

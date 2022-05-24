@@ -3,7 +3,7 @@ import {
   Header,
   Footer,
   FormRegisterUF,
-  ListUF,
+  ListaUF,
 } from "../../Components";
 
 
@@ -12,7 +12,7 @@ const PageUf = () => {
     <>
       <Header />
       <FormRegisterUF/>
-      <ListUF/>
+      <ListaUF/>
       <Footer />
     </>
   );

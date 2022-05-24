@@ -1,37 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import SaveBtn from "../BtnSave";
-import { api } from "../../Services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllMunicipios, getAllUfs } from "../../Redux/apiActions";
 
-const FormRegisterMUN = () => {
-  const listUF = useSelector((state)=>state.ufs[0])
-  const dispatch = useDispatch()
-
-  useEffect(()=> {
-    dispatch(getAllUfs())
-  },[])
-
-
+const FormRegisterPESSOA = () => {
   const handleRegister = async (values, actions) => {
-    values.status = parseInt(values.status)
-    values.idUF = parseInt(values.idUF)
-    try {
-      await api.post('/municipio', values)
-      dispatch(getAllMunicipios())
-    } catch (error) {
-      console.log(error);
-    }
+    console.log(values);
   };
 
   return (
     <div className="mt-4">
       <div className="flex flex-col  items-center shadow-2xl px-4 py-4 bg-gray-700">
         <h1 className="font-sans text-4xl font-bold text-white mb-10">
-          CRIAR MUNICÍPIO
+          CRIAR PESSOA
         </h1>
         <div>
           <Formik
@@ -39,7 +21,7 @@ const FormRegisterMUN = () => {
             onSubmit={handleRegister}
             initialValues={{
               nome: "",
-              idUF: "",
+              sobrenome: "",
               status: "",
             }}
           >
@@ -60,27 +42,15 @@ const FormRegisterMUN = () => {
                 </div>
                 <div className="flex flex-col">
                   <div>
-                    <p className="text-white font-bold">UF</p>
+                  <p className="text-white font-bold">Sobrenome</p>
                     <Field
-                      component="select"
-                      name="idUF"
-                      className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
-                    >
-                      <option>SELECIONE</option>
-                      {listUF ? 
-                        listUF.map((uf)=>(
-                          <option 
-                          key={uf.id} 
-                          value={uf.id}
-                          >
-                            {uf.nome}
-                          </option>
-                        ))
-                      : null}
-                    </Field>
+                      name="sobrenome"
+                      type="text"
+                      className=" rounded-lg  appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                    />
                   </div>
                     <span className="spanValidateForm">
-                      <ErrorMessage name="idUF" />
+                      <ErrorMessage name="sobrenome" />
                     </span>
                 </div>
                 <div className="flex flex-col">
@@ -96,9 +66,10 @@ const FormRegisterMUN = () => {
                       <option value={2}>DESATIVADO</option>
                     </Field>
                   </div>
-                  <span className="spanValidateForm">
-                    <ErrorMessage name="status" />
-                  </span>
+                    <span className="spanValidateForm">
+                      <ErrorMessage name="status" />
+                    </span>
+                  
                 </div>
                 <div className="flex flex-col">
                   <SaveBtn />
@@ -115,4 +86,4 @@ const FormRegisterMUN = () => {
   );
 };
 
-export default FormRegisterMUN;
+export default FormRegisterPESSOA;

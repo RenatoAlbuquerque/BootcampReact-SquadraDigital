@@ -1,18 +1,64 @@
 {
   "uf": [
     {
-      "cod": 2,
       "nome": "São Paulo",
       "sigla": "SP",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "nome": "Pernambuco",
+      "sigla": "PE",
+      "status": 2,
+      "id": 2
+    }
+  ],
+  "municipio": [
+    {
+      "nome": "Recife",
+      "idUF": 2,
+      "status": 1,
+      "id": 1
+    },
+    {
+      "nome": "Olinda",
+      "idUF": 2,
+      "status": 1,
+      "id": 2
+    }
+  ],
+  "bairro": [
+    {
+      "nome": "Centro",
+      "idMUN": 1,
+      "status": 1,
+      "id": 1
+    },
+    {
+      "nome": "Agua Fria",
+      "idMUN": 1,
       "status": 1,
       "id": 2
     },
     {
-      "cod": 3,
-      "nome": "Pernambuco",
-      "sigla": "PE",
+      "nome": "Bairro Novo",
+      "idMUN": 2,
       "status": 1,
       "id": 3
+    }
+  ],
+  "pessoa": [
+    {
+      "nome": "Renato",
+      "sobrenome": "Vinícius",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "nome": "Ygor",
+      "sobrenome": "Abreu",
+      "status": 1,
+      "id": 2
     }
   ]
 }

@@ -2,17 +2,19 @@ import React from "react";
 import {
   Header,
   Footer,
-  FormRegisterBAIRRO,
+  FormRegisterMUN,
+  ListaMUNICIPIO
 } from "../../Components";
 
 
-const PageBai = () => {
+const PagMunicipio = () => {
   return (
     <>
       <Header />
-      <FormRegisterBAIRRO/>
+      <FormRegisterMUN/>
+      <ListaMUNICIPIO/>
       <Footer />
     </>
   );
 };
-export default PageBai;
+export default PagMunicipio;

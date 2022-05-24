@@ -4,11 +4,17 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import SaveBtn from "../BtnSave";
 import { api } from "../../Services/api";
+import { useDispatch } from "react-redux";
+import { getAllUfs } from "../../Redux/apiActions";
 
 const FormRegisterUF = () => {
-  const handleRegister = async (envio, actions) => {
+  const dispatch = useDispatch()
+
+  const handleRegister = async (values, ) => {
+    values.status = parseInt(values.status)
     try {
-      await api.post('/uf', envio)
+      await api.post('/uf', values)
+      dispatch(getAllUfs())
     } catch (error) {
       console.log(error);
     }
@@ -27,10 +33,10 @@ const FormRegisterUF = () => {
             initialValues={{
               nome: "",
               sigla: "",
-              status: 0,
+              status: "",
             }}
           >
-            {({ errors, touched, isValid, handleChange, handleBlur }) => (
+            {({ errors, touched, isValid, handleChange, handleBlur, resetForm }) => (
               <Form className="flex items-end gap-5">
                 <div className="flex flex-col">
                   <div>
