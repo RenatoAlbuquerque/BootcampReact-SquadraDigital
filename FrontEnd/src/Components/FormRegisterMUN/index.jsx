@@ -2,17 +2,17 @@ import React, { useEffect } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
-import SaveBtn from "../BtnSave";
+import BtnSalvar from "../BtnSalvar";
 import { api } from "../../Services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllMunicipios, getAllUfs } from "../../Redux/apiActions";
+import { getAllMunicipios, pegarTodasUfs } from "../../Redux/apiActions";
 
 const FormRegisterMUN = () => {
   const listUF = useSelector((state)=>state.ufs[0])
   const dispatch = useDispatch()
 
   useEffect(()=> {
-    dispatch(getAllUfs())
+    dispatch(pegarTodasUfs())
   },[])
 
 
@@ -101,7 +101,7 @@ const FormRegisterMUN = () => {
                   </span>
                 </div>
                 <div className="flex flex-col">
-                  <SaveBtn />
+                  <BtnSalvar />
                   <span className="spanValidateForm">
                     </span>
                 </div>

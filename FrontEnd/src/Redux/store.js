@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
 import ufsReducer from "./reducers/ufsReducer";
 import municipiosReducer from "./reducers/municipiosReducer";
 import bairrosReducer from "./reducers/bairrosReducer";

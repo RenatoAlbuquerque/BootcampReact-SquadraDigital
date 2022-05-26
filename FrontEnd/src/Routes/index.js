@@ -12,7 +12,6 @@ const Rotas = () => {
         <Route exact path="/" element={<PageUf />} />
         <Route path="/municipio" element={<PagMunicipio />} />
         <Route path="/bairro" element={<PagBairro />} />
-
         <Route path="/pessoa" element={<PagPessoa />} />
       </Routes>
     </BrowserRouter>

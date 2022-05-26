@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
-import SaveBtn from "../BtnSave";
+import BtnSalvar from "../BtnSalvar";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBairros, getAllMunicipios } from "../../Redux/apiActions";
 import { api } from "../../Services/api";
@@ -101,7 +101,7 @@ const FormRegisterBAIRRO = () => {
                   
                 </div>
                 <div className="flex flex-col">
-                  <SaveBtn />
+                  <BtnSalvar />
                   <span className="spanValidateForm">
                     </span>
                 </div>

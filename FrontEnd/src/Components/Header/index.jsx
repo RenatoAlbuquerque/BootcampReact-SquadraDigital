@@ -7,7 +7,6 @@ const navigation = [
   { name: "UF", href: "/" },
   { name: "MUNICÍPIO", href: "/municipio" },
   { name: "BAIRRO", href: "/bairro" },
-  { name: "ENDEREÇO", href: "/endereco" },
   { name: "PESSOA", href: "/pessoa" },
 ];
 

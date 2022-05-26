@@ -2,7 +2,7 @@ import React from "react";
 import {
   Header,
   Footer,
-  FormRegisterUF,
+  FormRegistroUF,
   ListaUF,
 } from "../../Components";
 
@@ -11,7 +11,7 @@ const PageUf = () => {
   return (
     <>
       <Header />
-      <FormRegisterUF/>
+      <FormRegistroUF/>
       <ListaUF/>
       <Footer />
     </>

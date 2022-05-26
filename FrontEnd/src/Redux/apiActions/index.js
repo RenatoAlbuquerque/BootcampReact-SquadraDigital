@@ -4,7 +4,7 @@ import { renderMunicipios } from "../reducers/municipiosReducer";
 import { renderBairros } from "../reducers/bairrosReducer";
 import { renderPessoas } from "../reducers/pessoasReducer";
 
-export const getAllUfs = () => {
+export const pegarTodasUfs = () => {
   return (dispatch) => {
     api
       .get("/uf")

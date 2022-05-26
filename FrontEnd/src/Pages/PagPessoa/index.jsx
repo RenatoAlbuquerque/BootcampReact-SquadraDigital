@@ -12,7 +12,7 @@ const PagPessoa = () => {
     <>
       <Header />
       <FormRegisterPESSOA/>
-      <ListaPESSOA/>
+      {/* <ListaPESSOA/> */}
       <Footer />
     </>
   );
