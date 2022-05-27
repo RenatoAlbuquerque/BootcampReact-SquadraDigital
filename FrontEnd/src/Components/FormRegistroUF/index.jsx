@@ -1,21 +1,37 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registroFormUfSchema";
 import BtnSalvar from "../BtnSalvar";
 import { api } from "../../Services/api";
-import { useDispatch } from "react-redux";
-import { pegarTodasUfs } from "../../Redux/apiActions";
+import { UfContext } from "../../Contexts/ufContext";
 
 const FormRegistroUF = () => {
-  const dispatch = useDispatch()
+  const {pegarTodasUfs,
+    setNomeFormUf,
+    setSiglaFormUf,
+    setStatusFormUf, 
+    codigoFormUf,
+    nomeFormUf,
+    siglaFormUf,
+    statusFormUf} = useContext(UfContext)
+
   const enviarRegistro = async (values) => {
     values.nome = values.nome.toUpperCase()
     values.sigla = values.sigla.toUpperCase()
     values.status = parseInt(values.status)
+    console.log(values)
     try {
+      if(codigoFormUf){
+        await api.put('/uf', {
+          codigoUF: codigoFormUf,
+          nome: nomeFormUf,
+          sigla: siglaFormUf,
+          status: statusFormUf
+        })
+      }
       await api.post('/uf', values)
-      dispatch(pegarTodasUfs())
+      pegarTodasUfs()
     } catch (error) {
       console.log(error);
     }

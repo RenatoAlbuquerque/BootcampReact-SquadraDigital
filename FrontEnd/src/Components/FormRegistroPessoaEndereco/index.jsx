@@ -4,9 +4,17 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import BtnSalvar from "../BtnSalvar";
 
-const FormRegisterPESSOA = () => {
+const FormRegistroPessoaEndereco = () => {
   const registrarPessoa = async (values, actions) => {
     values.status = parseInt(values.status)
+    console.log(values);
+  };
+
+  const registrarEndereco = async (values, actions) => {
+    values.codigoBairro = parseInt(values.codigoBairro)
+    values.codigoMunicipio = parseInt(values.codigoMunicipio)
+    values.codigoUF = parseInt(values.codigoUF)
+    values.numero = parseInt(values.numero)
     console.log(values);
   };
 
@@ -27,7 +35,7 @@ const FormRegisterPESSOA = () => {
               status: "",
               login: "",
               senha: "",
-              idade: 0,
+              idade: "",
             }}
           >
             {({ errors, touched, isValid, handleChange, handleBlur }) => (
@@ -141,7 +149,8 @@ const FormRegisterPESSOA = () => {
         </h1>
         <div className="flex">
           <Formik
-            // onSubmit={handleRegister}
+            validationSchema={schema}
+            onSubmit={registrarEndereco}
             initialValues={{
               rua: "",
               numero: "",
@@ -150,6 +159,7 @@ const FormRegisterPESSOA = () => {
           >
             {({ errors, touched, isValid, handleChange, handleBlur }) => (
               <Form className="flex items-end gap-5">
+                {/* 1ª C0LUNA */}
                 <div >
                   {/* RUA */}
                   <div className="flex flex-col">
@@ -171,7 +181,7 @@ const FormRegisterPESSOA = () => {
                     <p className="text-white font-bold">Número</p>
                       <Field
                         name="numero"
-                        type="text"
+                        type="number"
                         className=" rounded-lg  appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                       />
                     </div>
@@ -194,14 +204,14 @@ const FormRegisterPESSOA = () => {
                       </span>
                   </div> 
                 </div>
-
+                {/* 2ª C0LUNA */}
                 <div>
                   <div className="flex flex-col">
                     <div>
                     <p className="text-white font-bold">UF</p>
                     <Field
                       component="select"
-                      name="uf"
+                      name="codigoUF"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
@@ -210,7 +220,7 @@ const FormRegisterPESSOA = () => {
                     </Field>
                     </div>
                     <span className="spanValidateForm">
-                      <ErrorMessage name="login" />
+                      <ErrorMessage name="codigoUF" />
                     </span>
                   </div>
                   <div className="flex flex-col">
@@ -218,7 +228,7 @@ const FormRegisterPESSOA = () => {
                     <p className="text-white font-bold">Município</p>
                     <Field
                       component="select"
-                      name="municipio"
+                      name="codigoMunicipio"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
@@ -227,7 +237,7 @@ const FormRegisterPESSOA = () => {
                     </Field>
                     </div>
                     <span className="spanValidateForm">
-                      <ErrorMessage name="municipio" />
+                      <ErrorMessage name="codigoMunicipio" />
                     </span>
                   </div>
                   <div className="flex flex-col">
@@ -235,7 +245,7 @@ const FormRegisterPESSOA = () => {
                     <p className="text-white font-bold">Bairro</p>
                     <Field
                       component="select"
-                      name="bairro"
+                      name="codigoBairro"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
@@ -244,11 +254,12 @@ const FormRegisterPESSOA = () => {
                     </Field>
                     </div>
                     <span className="spanValidateForm">
-                      <ErrorMessage name="login" />
+                      <ErrorMessage name="codigoBairro" />
                     </span>
                   </div>
                   
                 </div>
+
                 <div className="flex flex-col">
                   <button 
                     type="submit"
@@ -263,9 +274,8 @@ const FormRegisterPESSOA = () => {
           </Formik>
         </div>
       </div>
-      {/* FORM LISTA DE ENDEREÇOS */}
     </div>
   );
 };
 
-export default FormRegisterPESSOA;
+export default FormRegistroPessoaEndereco;

@@ -5,16 +5,19 @@ export { default as Footer } from "./Footer";
 
 //Formulários de Registro
 export { default as FormRegistroUF } from "./FormRegistroUF";
-export { default as FormRegisterMUN } from "./FormRegisterMUN";
-export { default as FormRegisterBAIRRO } from "./FormRegisterBAIRRO";
-
-export { default as FormRegisterPESSOA } from "./FormRegisterPESSOA";
+export { default as FormRegistroMunicipio } from "./FormRegistroMunicipio";
+export { default as FormRegistroBairro } from "./FormRegistroBairro";
+export { default as FormRegistroPessoaEndereco } from "./FormRegistroPessoaEndereco";
 //Listas de Renderização
 export { default as ListaUF } from "./ListaUF";
 export { default as ListaMUNICIPIO } from "./ListaMUNICIPIO";
 export { default as ListaBAIRRO } from "./ListaBAIRRO";
 
 export { default as ListaPESSOA } from "./ListaPESSOA";
+
+
+export { default as EnderecosCadastrados } from "./EnderecosCadastrados";
+export { default as CardDetalheEndereco } from "./CardDetalheEndereco";
 
 
 

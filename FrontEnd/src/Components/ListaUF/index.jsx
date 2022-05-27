@@ -1,20 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { pegarTodasUfs } from "../../Redux/apiActions";
+import React, { useContext, useEffect, useState } from "react";
+import { UfContext } from "../../Contexts/ufContext";
 import { api } from "../../Services/api";
 
 const ListaUF = () => {
-  const listaUfRenderizada = useSelector((state)=>state.ufs[0])
-  const dispatch = useDispatch()
-  const [pesquisaUf, setPesquisaUf] = useState('')
+  const {listaUfRenderizada, pegarTodasUfs, 
+    setCodigoFormUf,
+    setNomeFormUf,
+    setSiglaFormUf,
+    setStatusFormUf} = useContext(UfContext)
+  const [pesquisaUf, setPesquisaUf] = useState(0)
   useEffect(()=> {
-    dispatch(pegarTodasUfs())
+    pegarTodasUfs()
   },[])
+
+  const editarUf = (uf) => {
+    setCodigoFormUf(uf.codigoUF)
+    setNomeFormUf(uf.nome)
+    setSiglaFormUf(uf.sigla)
+    setStatusFormUf(uf.status)
+  }
 
   const deletarUf = async (uf) => {
     try {
       await api.delete(`/uf/${uf.codigoUF}`);
-      dispatch(pegarTodasUfs())
+      pegarTodasUfs()
     } catch (error) {
       console.log(error);
     }
@@ -38,24 +47,25 @@ const ListaUF = () => {
           status: 1
         });
       }
-      dispatch(pegarTodasUfs())
+      pegarTodasUfs()
     } catch (error) {
       console.log(error);
     }
   }
-
+  //pesquisa com parametros
   const pesquisarComParametros = async () => {
     try {
       const tipoDePesquisa = typeof(pesquisaUf)
+    console.log(tipoDePesquisa)
+
       if(tipoDePesquisa === 'string'){
         const { data } = await api.get(`/uf?sigla=${pesquisaUf}`);
       console.log(data,'string')
       }
-      // else{
+      // if(pesquisaUf !== Number){
       //   const { data } = await api.get(`/uf?codigoUF=${pesquisaUf}`);
       //   console.log(data,'number')
       // }
-      dispatch(pegarTodasUfs())
     } catch (error) {
       console.log(error);
     }
@@ -75,9 +85,9 @@ const ListaUF = () => {
                   <tr>
                     <th className=" flex justify-start items-center py-7 relative w-full">
                       <input
+                      type="text"
                       onChange={(e) => setPesquisaUf(e.target.value)}
                       className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
-                      type="text"
                       placeholder="Pesquise UF aqui."
                       />
                       <button onClick={pesquisarComParametros} className="absolute right-3 z-10 cursor-pointer ">
@@ -119,7 +129,7 @@ const ListaUF = () => {
                         </td>
                         <td className="pl-20 ">
                             <div className="flex items-center gap-2">
-                              <button title={'Clique para EDITAR'}>
+                              <button title={'Clique para EDITAR'} onClick={() => editarUf(uf)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer text-orange-500 " fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>

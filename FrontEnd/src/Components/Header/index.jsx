@@ -8,6 +8,7 @@ const navigation = [
   { name: "MUNICÍPIO", href: "/municipio" },
   { name: "BAIRRO", href: "/bairro" },
   { name: "PESSOA", href: "/pessoa" },
+  { name: "LISTA DE PESSOAS", href: "/pessoaslista" },
 ];
 
 function classNames(...classes) {

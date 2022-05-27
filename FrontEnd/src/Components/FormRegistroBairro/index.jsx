@@ -1,29 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import BtnSalvar from "../BtnSalvar";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllBairros, getAllMunicipios } from "../../Redux/apiActions";
 import { api } from "../../Services/api";
+import { municipioContext } from "../../Contexts/municipioContext";
 
-const FormRegisterBAIRRO = () => {
-  const listaMunicipioSelect = useSelector((state)=>state.municipios[0])
-  const dispatch = useDispatch()
 
+const FormRegistroBairro = () => {
+  const {pegarTodosMunicipios, listaMunicipiosRenderizada} = useContext(municipioContext)
   useEffect(()=> {
-    dispatch(getAllMunicipios())
+    // pegarTodosMunicipios()
   },[])
+  
 
-  const handleRegister = async (values, actions) => {
+  const enviarRegistro = async (values, actions) => {
+    values.codigoMunicipio = parseInt(values.codigoMunicipio)
+    values.nome = values.codigoMunicipio.toUpperCase()
     values.status = parseInt(values.status)
-    values.idMUN = parseInt(values.idMUN)
-    try {
-      await api.post('/bairro', values)
-      dispatch(getAllBairros())
-    } catch (error) {
-      console.log(error);
-    }
+    console.log(values)
+    // try {
+    //   await api.post('/bairro', values)
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -35,10 +35,10 @@ const FormRegisterBAIRRO = () => {
         <div>
           <Formik
             validationSchema={schema}
-            onSubmit={handleRegister}
+            onSubmit={enviarRegistro}
             initialValues={{
               nome: "",
-              idMUN: "",
+              codigoMunicipio: "",
               status: "",
             }}
           >
@@ -62,12 +62,12 @@ const FormRegisterBAIRRO = () => {
                     <p className="text-white font-bold">Município</p>
                     <Field
                       component="select"
-                      name="idMUN"
+                      name="codigoMunicipio"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
-                      {listaMunicipioSelect ? 
-                        listaMunicipioSelect.map((uf)=>(
+                      {listaMunicipiosRenderizada ? 
+                        listaMunicipiosRenderizada.map((uf)=>(
                           <option 
                           key={uf.id} 
                           value={uf.id}
@@ -79,7 +79,7 @@ const FormRegisterBAIRRO = () => {
                     </Field>
                   </div>
                     <span className="spanValidateForm">
-                      <ErrorMessage name="idMun" />
+                      <ErrorMessage name="codigoMunicipio" />
                     </span>
                 </div>
                 <div className="flex flex-col">
@@ -115,4 +115,4 @@ const FormRegisterBAIRRO = () => {
   );
 };
 
-export default FormRegisterBAIRRO;
+export default FormRegistroBairro;

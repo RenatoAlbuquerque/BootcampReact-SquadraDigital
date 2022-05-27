@@ -2,7 +2,7 @@ import React from "react";
 import {
   Header,
   Footer,
-  FormRegisterMUN,
+  FormRegistroMunicipio,
   ListaMUNICIPIO
 } from "../../Components";
 
@@ -11,7 +11,7 @@ const PagMunicipio = () => {
   return (
     <>
       <Header />
-      <FormRegisterMUN/>
+      <FormRegistroMunicipio/>
       <ListaMUNICIPIO/>
       <Footer />
     </>

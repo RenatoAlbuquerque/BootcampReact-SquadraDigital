@@ -1,30 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import BtnSalvar from "../BtnSalvar";
 import { api } from "../../Services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllMunicipios, pegarTodasUfs } from "../../Redux/apiActions";
+import { UfContext } from "../../Contexts/ufContext";
 
-const FormRegisterMUN = () => {
-  const listUF = useSelector((state)=>state.ufs[0])
-  const dispatch = useDispatch()
-
+const FormRegistroMunicipio = () => {
+  const {pegarTodasUfs, listaUfRenderizada} = useContext(UfContext)
   useEffect(()=> {
-    dispatch(pegarTodasUfs())
+    pegarTodasUfs()
   },[])
 
+  const listarMunicipiosDaUfSelecionada = (codigoUF) => {
+    console.log(codigoUF)
+  }
 
-  const handleRegister = async (values, actions) => {
+
+  const enviarRegistro = async (values, actions) => {
     values.status = parseInt(values.status)
     values.idUF = parseInt(values.idUF)
-    try {
-      await api.post('/municipio', values)
-      dispatch(getAllMunicipios())
-    } catch (error) {
-      console.log(error);
-    }
+    console.log(values)
+    // try {
+    //   await api.post('/municipio', values)
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -36,10 +37,10 @@ const FormRegisterMUN = () => {
         <div>
           <Formik
             validationSchema={schema}
-            onSubmit={handleRegister}
+            onSubmit={enviarRegistro}
             initialValues={{
               nome: "",
-              idUF: "",
+              codigoUF: "",
               status: "",
             }}
           >
@@ -67,11 +68,12 @@ const FormRegisterMUN = () => {
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
-                      {listUF ? 
-                        listUF.map((uf)=>(
+                      {listaUfRenderizada ? 
+                        listaUfRenderizada.map((uf)=>(
                           <option 
-                          key={uf.id} 
-                          value={uf.id}
+                          key={uf.codigoUF} 
+                          value={uf.codigoUF}
+                          onClick={() => listarMunicipiosDaUfSelecionada(uf)}
                           >
                             {uf.nome}
                           </option>
@@ -115,4 +117,4 @@ const FormRegisterMUN = () => {
   );
 };
 
-export default FormRegisterMUN;
+export default FormRegistroMunicipio;

@@ -1,27 +1,25 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllBairros } from "../../Redux/apiActions";
+import React, { useContext, useEffect } from "react";
+import { bairroContext } from "../../Contexts/bairroContext";
 import { api } from "../../Services/api";
 
 const ListaBAIRRO = () => {
   //renderizando 4x =====> OBSERVAR ERRO
-  const listBAI = useSelector((state)=>state.bairros[0])
-  const dispatch = useDispatch()
+  const {pegarTodosBairros, listaBairroRenderizada} = useContext(bairroContext)
+
 
   useEffect(()=> {
-    dispatch(getAllBairros())
+    // pegarTodosBairros()
   },[])
 
-  const deleteBairro = async (bairro) => {
+  const deletarBairro = async (bairro) => {
     try {
       await api.delete(`/bairro/${bairro.id}`);
-      dispatch(getAllBairros())
     } catch (error) {
       console.log(error);
     }
   }
 
-  const updateStatus = async (bairro) => {
+  const alterarStatus = async (bairro) => {
     try {
       if(bairro.status === 1){
         await api.put(`/bairro/${bairro.id}`,{
@@ -37,7 +35,6 @@ const ListaBAIRRO = () => {
           status: 1
         });
       }
-      dispatch(getAllBairros())
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +47,7 @@ const ListaBAIRRO = () => {
                         <p className="text-center sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">BAIRROS CADASTRADOS</p>
                     </div>
                 </div>
-                {listBAI ? 
+                {listaBairroRenderizada.length > 0 ? 
                 <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
                     <table className="w-full whitespace-nowrap">
                         <thead>
@@ -63,23 +60,23 @@ const ListaBAIRRO = () => {
                             </tr>
                         </thead>
                         <tbody className="w-full">
-                          {listBAI.map((obj)=>(
-                            obj.status === 1 ?
-                            <tr key={obj.id} className=" pr-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-l-8 border-green-500">
+                          {listaBairroRenderizada.map((bairro)=>(
+                            bairro.status === 1 ?
+                            <tr key={bairro.id} className=" pr-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-l-8 border-green-500">
                                 <td className="pl-4">
-                                    <p className="font-medium">{obj.id}</p>
+                                    <p className="font-medium">{bairro.id}</p>
                                 </td>
                                 <td className="pl-12">
-                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{obj.nome}</button>
+                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{bairro.nome}</button>
                                 </td>
                                 <td className="pl-12">
-                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{obj.idMUN}</button>
+                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{bairro.idMUN}</button>
                                 </td>
                                 <td className="pl-12">
                                     <button 
                                     title={'Clique para DESATIVAR'} 
                                     className="font-medium hover:text-orange-500 cursor-pointer"
-                                    onClick={() => updateStatus(obj)}
+                                    onClick={() => alterarStatus(bairro)}
                                     >
                                       ATIVADO
                                     </button>
@@ -92,7 +89,7 @@ const ListaBAIRRO = () => {
                                         </svg>
                                       </button>
                                       <button  
-                                      onClick={() => deleteBairro(obj)}
+                                      onClick={() => deletarBairro(bairro)}
                                       title={'Clique para EXCLUIR'}>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -102,19 +99,19 @@ const ListaBAIRRO = () => {
                                 </td>                          
                             </tr>
                             :
-                            <tr key={obj.id} className="pl-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-r-8 border-red-500">
+                            <tr key={bairro.id} className="pl-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-r-8 border-red-500">
                                 <td className="pl-4">
-                                    <p className="font-medium ml-1">{obj.id}</p>
+                                    <p className="font-medium ml-1">{bairro.id}</p>
                                 </td>
                                 <td className="pl-12">
-                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{obj.nome}</button>
+                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{bairro.nome}</button>
                                 </td>
                                 <td className="pl-12">
-                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{obj.idMUN}</button>
+                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{bairro.idMUN}</button>
                                 </td>
                                 <td className="pl-12">
                                     <button 
-                                    onClick={() => updateStatus(obj)}
+                                    onClick={() => alterarStatus(bairro)}
                                     title={'Clique para ATIVAR'} 
                                     className="font-medium hover:text-orange-500 cursor-pointer"
                                     >
@@ -129,7 +126,7 @@ const ListaBAIRRO = () => {
                                         </svg>
                                       </button>
                                       <button 
-                                        onClick={() => deleteBairro(obj)}
+                                        onClick={() => deletarBairro(bairro)}
                                         title={'Clique para EXCLUIR'}>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -142,7 +139,7 @@ const ListaBAIRRO = () => {
                         </tbody>
                     </table>
                 </div>
-                : 'não tem nada'}
+                : <p>Não há Bairros Cadastrados</p>}
             </div>
     );
 }
