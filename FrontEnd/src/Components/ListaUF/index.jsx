@@ -2,8 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { UfContext } from "../../Contexts/ufContext";
 import { api } from "../../Services/api";
 
+
 const ListaUF = () => {
-  const {listaUfRenderizada, pegarTodasUfs, 
+  const {listaUfRenderizada, pegarTodasUfs,
+    pesquisarComParametrosSiglaNomeCodigoUF,
+    pesquisarPorStatus,
     setCodigoFormUf,
     setNomeFormUf,
     setSiglaFormUf,
@@ -52,24 +55,7 @@ const ListaUF = () => {
       console.log(error);
     }
   }
-  //pesquisa com parametros
-  const pesquisarComParametros = async () => {
-    try {
-      const tipoDePesquisa = typeof(pesquisaUf)
-    console.log(tipoDePesquisa)
 
-      if(tipoDePesquisa === 'string'){
-        const { data } = await api.get(`/uf?sigla=${pesquisaUf}`);
-      console.log(data,'string')
-      }
-      // if(pesquisaUf !== Number){
-      //   const { data } = await api.get(`/uf?codigoUF=${pesquisaUf}`);
-      //   console.log(data,'number')
-      // }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   return (
     <div className="w-full sm:px-6">
@@ -78,25 +64,38 @@ const ListaUF = () => {
                 <p className="text-center sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">UF'S CADASTRADAS</p>
             </div>
         </div>
+        <p className="mt-5 sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">Listar Por Filtros</p>
+        <div className="flex gap-10">
+          <div className="flex justify-start items-center py-2 relative w-2/5">
+            <input
+            type="text"
+            onChange={(e) => setPesquisaUf(e.target.value)}
+            className="text-sm leading-none text-left text-gray-600 px-4 py-3 border rounded border-gray-300  outline-none w-full"
+            placeholder="Pesquise por Nome,Sigla ou CódigoUF."
+            />
+            <button onClick={()=>pesquisarComParametrosSiglaNomeCodigoUF(pesquisaUf)} className="absolute right-3 z-10 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
+          <div className="cursor-pointer flex justify-start items-center py-2 relative w-1/3">
+            <div className="relative ">
+              <select onClick={(e)=>pesquisarPorStatus(e.target.value)} className="block appearance-none w-full bg-transparent border border-gray-200  py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option className="text-gray-600" value={0}>Pesquise por Status</option>
+                <option value={1}>ATIVADO</option>
+                <option value={2}>DESATIVADO</option>
+              </select>
+              <div className="pointer-events-none  absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
         {listaUfRenderizada ? 
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
             <table className="w-full whitespace-nowrap">
                 <thead>
-                  <tr>
-                    <th className=" flex justify-start items-center py-7 relative w-full">
-                      <input
-                      type="text"
-                      onChange={(e) => setPesquisaUf(e.target.value)}
-                      className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
-                      placeholder="Pesquise UF aqui."
-                      />
-                      <button onClick={pesquisarComParametros} className="absolute right-3 z-10 cursor-pointer ">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                      </button>
-                    </th>
-                  </tr>
                     <tr className="h-16 w-full text-sm leading-none text-gray-800">
                         <th className="font-normal text-left pl-4">CODIGO</th>
                         <th className="font-normal text-left pl-12">NOME</th>
@@ -108,7 +107,7 @@ const ListaUF = () => {
                 <tbody className="w-full">
                   {listaUfRenderizada.map((uf)=>(
                     uf.status === 1 ?
-                    <tr key={uf.codigoUF} className=" pr-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-l-8 border-green-500">
+                    <tr key={uf.codigoUF} className="pr-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-l-8 border-green-500">
                         <td className="pl-4">
                             <p className="font-medium">{uf.codigoUF}</p>
                         </td>

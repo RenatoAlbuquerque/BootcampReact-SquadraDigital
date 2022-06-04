@@ -17,10 +17,11 @@ const FormRegistroMunicipio = () => {
   }
 
 
-  const enviarRegistro = async (values, actions) => {
+  const enviarRegistroDeMunicipio = (values, actions) => {
+    values.codigoUF = parseInt(values.codigoUF)
+    values.nome = values.nome.toUpperCase()
     values.status = parseInt(values.status)
-    values.idUF = parseInt(values.idUF)
-    console.log(values)
+    console.log(values, 'ola')
     // try {
     //   await api.post('/municipio', values)
     // } catch (error) {
@@ -37,7 +38,7 @@ const FormRegistroMunicipio = () => {
         <div>
           <Formik
             validationSchema={schema}
-            onSubmit={enviarRegistro}
+            onSubmit={enviarRegistroDeMunicipio}
             initialValues={{
               nome: "",
               codigoUF: "",
@@ -63,8 +64,9 @@ const FormRegistroMunicipio = () => {
                   <div>
                     <p className="text-white font-bold">UF</p>
                     <Field
+                      onClick={(e) => listarMunicipiosDaUfSelecionada(e.target.value)}
                       component="select"
-                      name="idUF"
+                      name="codigoUF"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                       <option>SELECIONE</option>
@@ -72,8 +74,7 @@ const FormRegistroMunicipio = () => {
                         listaUfRenderizada.map((uf)=>(
                           <option 
                           key={uf.codigoUF} 
-                          value={uf.codigoUF}
-                          onClick={() => listarMunicipiosDaUfSelecionada(uf)}
+                          value={parseInt(uf.codigoUF)}
                           >
                             {uf.nome}
                           </option>
@@ -103,11 +104,10 @@ const FormRegistroMunicipio = () => {
                   </span>
                 </div>
                 <div className="flex flex-col">
-                  <BtnSalvar />
+                  <BtnSalvar type="submit"/>
                   <span className="spanValidateForm">
-                    </span>
+                  </span>
                 </div>
-                
               </Form>
             )}
           </Formik>

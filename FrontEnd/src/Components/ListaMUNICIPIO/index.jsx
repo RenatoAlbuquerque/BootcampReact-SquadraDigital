@@ -1,12 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { municipioContext } from "../../Contexts/municipioContext";
 import { api } from "../../Services/api";
 
 const ListaMUNICIPIO = () => {
   const {pegarTodosMunicipios, listaMunicipiosRenderizada} = useContext(municipioContext)
-
   useEffect(()=> {
-    // pegarTodosMunicipios()
+    pegarTodosMunicipios()
   },[])
 
   const deletarMunicipio = async (mun) => {
@@ -20,23 +19,27 @@ const ListaMUNICIPIO = () => {
   const alterarStatus = async (mun) => {
     try {
       if(mun.status === 1){
-        await api.put(`/municipio/${mun.id}`,{
+        await api.put(`/municipio`,{
+          codigoMunicipio: mun.codigoMunicipio,
+          codigoUF: mun.codigoUF,
           nome: mun.nome,
-          idUF: mun.idUF,
           status: 2
         });
       }
       if(mun.status === 2){
-        await api.put(`/municipio/${mun.id}`,{
+        await api.put(`/municipio`,{
+          codigoMunicipio: mun.codigoMunicipio,
+          codigoUF: mun.codigoUF,
           nome: mun.nome,
-          idUF: mun.idUF,
           status: 1
         });
       }
+      pegarTodosMunicipios()
     } catch (error) {
       console.log(error);
     }
   }
+
 
     return (
             <div className="w-full sm:px-6">
@@ -60,16 +63,23 @@ const ListaMUNICIPIO = () => {
                         <tbody className="w-full">
                           {listaMunicipiosRenderizada.map((municipio)=>(
                             municipio.status === 1 ?
-                            <tr key={municipio.id} className=" pr-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-l-8 border-green-500">
+                            <tr key={municipio.codigoMunicipio} className=" pr-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-l-8 border-green-500">
                                 <td className="pl-4">
-                                    <p className="font-medium">{municipio.id}</p>
+                                    <p className="font-medium">{municipio.codigoMunicipio}</p>
                                 </td>
                                 <td className="pl-12">
                                     <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{municipio.nome}</button>
                                 </td>
+
                                 <td className="pl-12">
-                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{municipio.idUF}</button>
+                                    <button 
+                                      title={'Clique para EDITAR'} 
+                                      className="font-medium hover:text-orange-500 cursor-pointer"
+                                    >
+                                      {municipio.codigoUF}
+                                    </button>
                                 </td>
+
                                 <td className="pl-12">
                                     <button 
                                     title={'Clique para DESATIVAR'} 
@@ -97,15 +107,17 @@ const ListaMUNICIPIO = () => {
                                 </td>                          
                             </tr>
                             :
-                            <tr key={municipio.id} className="pl-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-r-8 border-red-500">
+                            <tr key={municipio.codigoMunicipio} className="pl-8 h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100   border-r-8 border-red-500">
                                 <td className="pl-4">
-                                    <p className="font-medium ml-1">{municipio.id}</p>
+                                    <p className="font-medium ml-1">{municipio.codigoMunicipio}</p>
                                 </td>
                                 <td className="pl-12">
                                     <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{municipio.nome}</button>
                                 </td>
                                 <td className="pl-12">
-                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">{municipio.idUF}</button>
+                                    <button title={'Clique para EDITAR'} className="font-medium hover:text-orange-500 cursor-pointer">
+                                      {municipio.codigoUF}
+                                    </button>
                                 </td>
                                 <td className="pl-12">
                                     <button 

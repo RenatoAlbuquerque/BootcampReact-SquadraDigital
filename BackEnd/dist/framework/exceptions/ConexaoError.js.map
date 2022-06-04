@@ -1,0 +1,1 @@
+{"version":3,"file":"ConexaoError.js","sourceRoot":"","sources":["../../../src/framework/exceptions/ConexaoError.ts"],"names":[],"mappings":";;;;;AAAA,oEAA4C;AAE5C,MAAM,YAAa,SAAQ,uBAAa;IAEpC,YAAY,QAAiB,EAAE,MAAe,EAAE,KAAW;QAEvD,KAAK,CAAC,QAAQ,EAAE,MAAM,EAAE,KAAK,CAAC,CAAC;IACnC,CAAC;CACJ;AAED,kBAAe,YAAY,CAAC"}

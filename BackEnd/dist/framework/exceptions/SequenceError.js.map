@@ -1,0 +1,1 @@
+{"version":3,"file":"SequenceError.js","sourceRoot":"","sources":["../../../src/framework/exceptions/SequenceError.ts"],"names":[],"mappings":";;;;;AAAA,oEAA4C;AAE5C,MAAM,aAAc,SAAQ,uBAAa;IAErC,YAAY,YAAqB,EAAE,KAAW;QAE1C,KAAK,CAAC,qCAAqC,GAAG,YAAY,GAAE,GAAG,EAAE,GAAG,EAAE,KAAK,CAAC,CAAC;IACjF,CAAC;CACJ;AAED,kBAAe,aAAa,CAAC"}

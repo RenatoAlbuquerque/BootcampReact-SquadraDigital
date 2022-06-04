@@ -1,0 +1,1 @@
+{"version":3,"file":"ConsultarError.js","sourceRoot":"","sources":["../../../src/framework/exceptions/ConsultarError.ts"],"names":[],"mappings":";;;;;AAAA,oEAA4C;AAE5C,MAAM,cAAe,SAAQ,uBAAa;IAEtC,YAAY,MAAe,EAAE,MAAe,EAAE,MAAe,EAAE,KAAW;QAEtE,KAAK,CAAC,6BAA6B,GAAG,MAAM,GAAE,iCAAiC,GAAG,MAAM,EAAE,MAAM,EAAE,KAAK,CAAC,CAAC;IAC7G,CAAC;CACJ;AAED,kBAAe,cAAc,CAAC"}

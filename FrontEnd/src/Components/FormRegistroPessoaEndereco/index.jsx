@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
 import BtnSalvar from "../BtnSalvar";
+import { UfContext } from "../../Contexts/ufContext";
 
 const FormRegistroPessoaEndereco = () => {
+  const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
+
+  const gerarMunicipios = (uf) => {
+    console.log(uf)
+  }
+  useEffect(()=>(
+    pegarTodasUfs
+    ),[])
+
   const registrarPessoa = async (values, actions) => {
     values.status = parseInt(values.status)
     console.log(values);
@@ -209,15 +219,19 @@ const FormRegistroPessoaEndereco = () => {
                   <div className="flex flex-col">
                     <div>
                     <p className="text-white font-bold">UF</p>
+                    {listaUfRenderizada ? 
                     <Field
+                      onClick={(e) => gerarMunicipios(e.target.value)}
                       component="select"
                       name="codigoUF"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
-                      <option>SELECIONE</option>
-                      <option value={1}>ATIVADO</option>
-                      <option value={2}>DESATIVADO</option>
+                          <option>SELECIONE</option>
+                        {listaUfRenderizada.map((uf)=>(
+                          <option  key={uf.codigoUF} value={uf.codigoUF} >{uf.nome}</option>
+                        ))}
                     </Field>
+                      : null}
                     </div>
                     <span className="spanValidateForm">
                       <ErrorMessage name="codigoUF" />
