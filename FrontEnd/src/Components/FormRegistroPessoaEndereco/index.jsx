@@ -1,32 +1,66 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
-import schema from "./registerFormSchema";
+import schemaPessoa from "./registerFormSchemaPessoa";
+import schemaEndereco from "./registerFormSchemaEndereco";
 import BtnSalvar from "../BtnSalvar";
 import { UfContext } from "../../Contexts/ufContext";
+import { api } from "../../Services/api";
+import { pessoaContext } from "../../Contexts/pessoasContext";
 
 const FormRegistroPessoaEndereco = () => {
   const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
+  const {setListaEnderecos} = useContext(pessoaContext)
+  const [municipiosSelect, setMunicipiosSelect] = useState([])
+  const [bairrosSelect, setBairrosSelect] = useState([])
 
-  const gerarMunicipios = (uf) => {
-    console.log(uf)
-  }
+  
   useEffect(()=>(
     pegarTodasUfs
-    ),[])
+  ),[])
+
+  const gerarMunicipios = async (codigoUF) => {
+    try {
+      const { data } = await api.get(`/municipio?codigoUF=${codigoUF}`);
+      setMunicipiosSelect(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const gerarBairros = async (codigoMunicipio) => {
+    try {
+      const { data } = await api.get(`/bairro?codigoMunicipio=${codigoMunicipio}`);
+      setBairrosSelect(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const registrarPessoa = async (values, actions) => {
     values.status = parseInt(values.status)
     console.log(values);
   };
 
-  const registrarEndereco = async (values, actions) => {
-    values.codigoBairro = parseInt(values.codigoBairro)
-    values.codigoMunicipio = parseInt(values.codigoMunicipio)
-    values.codigoUF = parseInt(values.codigoUF)
-    values.numero = parseInt(values.numero)
-    console.log(values);
+  const registrarEndereco = async (values,  { resetForm }) => {
+    const [uf] = listaUfRenderizada?.filter((uf) => uf.codigoUF === parseInt(values.codigoUF))
+    const [municipio] = municipiosSelect?.filter((municipio) => municipio.codigoMunicipio === parseInt(values.codigoMunicipio))
+    const [bairro] = bairrosSelect?.filter((bairro) => bairro.codigoBairro === parseInt(values.codigoBairro))
+    const payload = {
+      uf: uf.sigla,
+      nomeUf: uf.nome,
+      municipio: municipio.nome,
+      codigoBairro: parseInt(values.codigoBairro),
+      nomeBairro: bairro.nome,
+      rua: values.rua,
+      numero: parseInt(values.numero),
+      complemento: values.complemento,
+    }
+    
+    setListaEnderecos(listaEnderecos => [...listaEnderecos, payload])
+    resetForm({ values: ''})
   };
+
 
   return (
     <div className="mt-4">
@@ -37,7 +71,7 @@ const FormRegistroPessoaEndereco = () => {
         </h1>
         <div className="flex">
           <Formik
-            validationSchema={schema}
+            validationSchema={schemaPessoa}
             onSubmit={registrarPessoa}
             initialValues={{
               nome: "",
@@ -143,9 +177,9 @@ const FormRegistroPessoaEndereco = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <BtnSalvar />
+                  <BtnSalvar type="submit"/>
                   <span className="spanValidateForm">
-                    </span>
+                  </span>
                 </div>
               </Form>
             )}
@@ -159,12 +193,13 @@ const FormRegistroPessoaEndereco = () => {
         </h1>
         <div className="flex">
           <Formik
-            validationSchema={schema}
+            validationSchema={schemaEndereco}
             onSubmit={registrarEndereco}
             initialValues={{
               rua: "",
               numero: "",
               complemento: "",
+              codigoUF: ""
             }}
           >
             {({ errors, touched, isValid, handleChange, handleBlur }) => (
@@ -221,14 +256,14 @@ const FormRegistroPessoaEndereco = () => {
                     <p className="text-white font-bold">UF</p>
                     {listaUfRenderizada ? 
                     <Field
-                      onClick={(e) => gerarMunicipios(e.target.value)}
+                      onClick={(e) => gerarMunicipios(parseInt(e.target.value))}
                       component="select"
                       name="codigoUF"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
                           <option>SELECIONE</option>
                         {listaUfRenderizada.map((uf)=>(
-                          <option  key={uf.codigoUF} value={uf.codigoUF} >{uf.nome}</option>
+                          <option   key={uf.codigoUF} value={uf.codigoUF} >{uf.nome}</option>
                         ))}
                     </Field>
                       : null}
@@ -241,13 +276,15 @@ const FormRegistroPessoaEndereco = () => {
                     <div>
                     <p className="text-white font-bold">Município</p>
                     <Field
+                      onClick={(e) => gerarBairros(e.target.value)}
                       component="select"
                       name="codigoMunicipio"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
-                      <option>SELECIONE</option>
-                      <option value={1}>ATIVADO</option>
-                      <option value={2}>DESATIVADO</option>
+                        <option>SELECIONE</option>
+                      {municipiosSelect.map((uf)=>(
+                        <option  key={uf.codigoMunicipio} value={parseInt(uf.codigoMunicipio)} >{uf.nome}</option>
+                      ))}
                     </Field>
                     </div>
                     <span className="spanValidateForm">
@@ -262,9 +299,10 @@ const FormRegistroPessoaEndereco = () => {
                       name="codigoBairro"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
-                      <option>SELECIONE</option>
-                      <option value={1}>ATIVADO</option>
-                      <option value={2}>DESATIVADO</option>
+                        <option>SELECIONE</option>
+                      {bairrosSelect.map((bairro)=>(
+                        <option  key={bairro.codigoBairro} value={parseInt(bairro.codigoBairro)} >{bairro.nome}</option>
+                      ))}
                     </Field>
                     </div>
                     <span className="spanValidateForm">
@@ -281,7 +319,7 @@ const FormRegistroPessoaEndereco = () => {
                     ADICIONAR
                   </button>
                   <span className="spanValidateForm">
-                    </span>
+                  </span>
                 </div>
               </Form>
             )}

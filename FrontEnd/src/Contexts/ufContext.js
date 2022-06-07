@@ -1,14 +1,11 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext } from "react";
 import { api } from "../Services/api";
 
 export const UfContext = createContext({});
 
 export const UfProvider = ({ children }) => {
   const [listaUfRenderizada, setListaUfRenderizada] = useState([]);
-  const [codigoFormUf, setCodigoFormUf] = useState("");
-  const [nomeFormUf, setNomeFormUf] = useState("");
-  const [siglaFormUf, setSiglaFormUf] = useState("");
-  const [statusFormUf, setStatusFormUf] = useState("");
+  const [ufAtual, setUfAtual] = useState()
 
   const pegarTodasUfs = async () => {
     try {
@@ -59,18 +56,10 @@ export const UfProvider = ({ children }) => {
       value={{
         pegarTodasUfs,
         listaUfRenderizada,
-
         pesquisarComParametrosSiglaNomeCodigoUF,
         pesquisarPorStatus,
-
-        codigoFormUf,
-        nomeFormUf,
-        siglaFormUf,
-        statusFormUf,
-        setCodigoFormUf,
-        setNomeFormUf,
-        setSiglaFormUf,
-        setStatusFormUf,
+        ufAtual, 
+        setUfAtual
       }}
     >
       {children}

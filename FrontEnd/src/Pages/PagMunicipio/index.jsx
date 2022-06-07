@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Header,
   Footer,
   FormRegistroMunicipio,
+  FormEditarMunicipio,
   ListaMUNICIPIO
 } from "../../Components";
+import { municipioContext } from "../../Contexts/municipioContext";
 
 
 const PagMunicipio = () => {
+  const {municipioAtual} = useContext(municipioContext)
+
   return (
     <>
       <Header />
-      <FormRegistroMunicipio/>
+      {municipioAtual ? (
+        <FormEditarMunicipio/>
+      ):(
+        <FormRegistroMunicipio/>
+      )}
       <ListaMUNICIPIO/>
       <Footer />
     </>

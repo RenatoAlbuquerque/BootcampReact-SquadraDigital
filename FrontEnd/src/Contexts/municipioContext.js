@@ -1,5 +1,8 @@
 import React, { useState, createContext } from "react";
-import { api } from "../Services/api";
+import {
+  listarTodosMunicipios,
+  pegarTodasUfs,
+} from "../Components/Utils/listaMunicipios";
 
 export const municipioContext = createContext({});
 
@@ -7,34 +10,33 @@ export const MunicipioProvider = ({ children }) => {
   const [listaMunicipiosRenderizada, setListaMunicipiosRenderizada] = useState(
     []
   );
-  const [codigoFormMunicipio, setCodigoFormMunicipio] = useState("");
-  const [nomeFormMunicipio, setNomeFormMunicipio] = useState("");
-  const [siglaFormMunicipio, setSiglaFormMunicipio] = useState("");
-  const [statusFormMunicipio, setStatusFormMunicipio] = useState("");
+  const [municipioAtual, setMunicipioAtual] = useState();
+  const [municipios, setMunicipios] = useState([]);
+  const [listaUf, setListaUf] = useState([]);
 
   const pegarTodosMunicipios = async () => {
     try {
-      const { data } = await api.get("/municipio");
-      setListaMunicipiosRenderizada(data);
+      const municipios = await listarTodosMunicipios();
+      setListaMunicipiosRenderizada(municipios);
+      setMunicipios(municipios);
+      const ufsFiltro = await pegarTodasUfs();
+      setListaUf(ufsFiltro);
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <municipioContext.Provider
       value={{
         pegarTodosMunicipios,
         listaMunicipiosRenderizada,
         setListaMunicipiosRenderizada,
-
-        codigoFormMunicipio,
-        nomeFormMunicipio,
-        siglaFormMunicipio,
-        statusFormMunicipio,
-        setCodigoFormMunicipio,
-        setNomeFormMunicipio,
-        setSiglaFormMunicipio,
-        setStatusFormMunicipio,
+        municipioAtual,
+        setMunicipioAtual,
+        listaUf,
+        municipios,
+        setMunicipios,
       }}
     >
       {children}

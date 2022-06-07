@@ -5,25 +5,30 @@ import schema from "./registerFormSchema";
 import BtnSalvar from "../BtnSalvar";
 import { api } from "../../Services/api";
 import { municipioContext } from "../../Contexts/municipioContext";
+import { bairroContext } from "../../Contexts/bairroContext";
+
 
 
 const FormRegistroBairro = () => {
-  const {pegarTodosMunicipios, listaMunicipiosRenderizada} = useContext(municipioContext)
+  const {pegarTodosMunicipios, listaMunicipiosRenderizada} = useContext(municipioContext);
+  const {pegarTodosBairros} = useContext(bairroContext)
+  
   useEffect(()=> {
-    // pegarTodosMunicipios()
+    pegarTodosMunicipios()
   },[])
   
 
-  const enviarRegistro = async (values, actions) => {
+  const enviarRegistroDeBairro = async (values,  { resetForm }) => {
     values.codigoMunicipio = parseInt(values.codigoMunicipio)
-    values.nome = values.codigoMunicipio.toUpperCase()
+    values.nome = values.nome.toUpperCase()
     values.status = parseInt(values.status)
-    console.log(values)
-    // try {
-    //   await api.post('/bairro', values)
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await api.post('/bairro', values)
+      resetForm({ values: ''})
+      pegarTodosBairros()
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -35,7 +40,7 @@ const FormRegistroBairro = () => {
         <div>
           <Formik
             validationSchema={schema}
-            onSubmit={enviarRegistro}
+            onSubmit={enviarRegistroDeBairro}
             initialValues={{
               nome: "",
               codigoMunicipio: "",
@@ -69,8 +74,8 @@ const FormRegistroBairro = () => {
                       {listaMunicipiosRenderizada ? 
                         listaMunicipiosRenderizada.map((uf)=>(
                           <option 
-                          key={uf.id} 
-                          value={uf.id}
+                          key={uf.codigoMunicipio} 
+                          value={parseInt(uf.codigoMunicipio)}
                           >
                             {uf.nome}
                           </option>
@@ -101,7 +106,7 @@ const FormRegistroBairro = () => {
                   
                 </div>
                 <div className="flex flex-col">
-                  <BtnSalvar />
+                  <BtnSalvar type='submit'/>
                   <span className="spanValidateForm">
                     </span>
                 </div>

@@ -1,38 +1,40 @@
 import React, { useState, createContext } from "react";
-import { api } from "../Services/api";
+import {
+  listarTodosBairros,
+  pegarTodosMunicipios,
+} from "../Components/Utils/listaBairro";
 
 export const bairroContext = createContext({});
 
 export const BairroProvider = ({ children }) => {
   const [listaBairroRenderizada, setListaBairrosRenderizada] = useState([]);
-  const [codigoFormBairro, setCodigoFormBairro] = useState("");
-  const [nomeFormBairro, setNomeFormBairro] = useState("");
-  const [siglaFormBairro, setSiglaFormBairro] = useState("");
-  const [statusFormBairro, setStatusFormBairro] = useState("");
+  const [bairroAtual, setBairroAtual] = useState();
+  const [bairros, setBairros] = useState([]);
+  const [listaMunicipios, setListaMunicipios] = useState([]);
 
   const pegarTodosBairros = async () => {
     try {
-      const { data } = await api.get("/bairro");
-      setListaBairrosRenderizada(data);
+      const bairros = await listarTodosBairros();
+      setListaBairrosRenderizada(bairros);
+      setBairros(bairros);
+      const municipiosFiltro = await pegarTodosMunicipios();
+      setListaMunicipios(municipiosFiltro);
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <bairroContext.Provider
       value={{
         pegarTodosBairros,
         listaBairroRenderizada,
         setListaBairrosRenderizada,
-
-        codigoFormBairro,
-        nomeFormBairro,
-        siglaFormBairro,
-        statusFormBairro,
-        setCodigoFormBairro,
-        setNomeFormBairro,
-        setSiglaFormBairro,
-        setStatusFormBairro,
+        bairroAtual,
+        setBairroAtual,
+        bairros,
+        setBairros,
+        listaMunicipios,
       }}
     >
       {children}

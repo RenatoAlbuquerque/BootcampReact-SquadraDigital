@@ -5,28 +5,27 @@ import schema from "./registerFormSchema";
 import BtnSalvar from "../BtnSalvar";
 import { api } from "../../Services/api";
 import { UfContext } from "../../Contexts/ufContext";
+import { municipioContext } from "../../Contexts/municipioContext";
 
 const FormRegistroMunicipio = () => {
   const {pegarTodasUfs, listaUfRenderizada} = useContext(UfContext)
+  const {pegarTodosMunicipios} = useContext(municipioContext)
+  
   useEffect(()=> {
     pegarTodasUfs()
   },[])
 
-  const listarMunicipiosDaUfSelecionada = (codigoUF) => {
-    console.log(codigoUF)
-  }
-
-
-  const enviarRegistroDeMunicipio = (values, actions) => {
+  const enviarRegistroDeMunicipio = async (values, { resetForm }) => {
     values.codigoUF = parseInt(values.codigoUF)
     values.nome = values.nome.toUpperCase()
     values.status = parseInt(values.status)
-    console.log(values, 'ola')
-    // try {
-    //   await api.post('/municipio', values)
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await api.post('/municipio', values)
+      resetForm({ values: ''})
+      pegarTodosMunicipios()
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -64,7 +63,6 @@ const FormRegistroMunicipio = () => {
                   <div>
                     <p className="text-white font-bold">UF</p>
                     <Field
-                      onClick={(e) => listarMunicipiosDaUfSelecionada(e.target.value)}
                       component="select"
                       name="codigoUF"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"

@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { pessoaContext } from "../../Contexts/pessoasContext";
 import '../style.css'
 
-const CardDetalheEndereco = () => {
+const CardDetalheEndereco = ({endereco}) => {
   const [bandeiraEstadoUf, setBandeiraEstadoUf] = useState('')
-  const {setModelDetalheEndereco} = useContext(pessoaContext);
+  const {setModalDetalheEndereco} = useContext(pessoaContext);
 
-  const backgroundCardEndereco = (endereco) => {
-    switch (endereco) {
+  const backgroundCardEndereco = (sigla) => {
+    switch (sigla) {
       case 'RJ':
         setBandeiraEstadoUf('data:image/jpeg;base64,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')
         break;
@@ -24,37 +24,57 @@ const CardDetalheEndereco = () => {
     }
   }
   useEffect(()=>(
-    backgroundCardEndereco('PE')
+    backgroundCardEndereco(endereco.uf)
   ),[])
     return (
-        <div className="backdrop" onClick={() => setModelDetalheEndereco(false)}>
+        <div className="backdrop" onClick={() => setModalDetalheEndereco(false)}>
             <div className="w-full flex items-center justify-center">
-                <div className="xl:w-1/4 sm:w-1/2 w-full 2xl:w-1/5 flex flex-col items-center py-5 md:py-12 bg-gradient-to-r from-gray-700 to-gray-500 rounded-lg">
+                <div className="  sm:w-1/2 w-full 2xl:w-2/5 flex flex-col items-center py-5 md:py-12 bg-gradient-to-r from-gray-700 to-gray-500 rounded-lg">
                     <div className="w-full flex items-center justify-center">
                         <div className="flex flex-col items-center">
                             <img src={bandeiraEstadoUf} alt="profile" />
-                            <p className="mt-2 text-base sm:text-sm md:text-base font-semibold text-center text-white">PERNAMBUCO</p>
+                            <p className="mt-2 text-base sm:text-sm md:text-base font-semibold text-center text-white">
+                              {endereco.nomeUf}
+                            </p>
                         </div>
                     </div>
-                    <div className="flex items-center mt-3">
-                        <div>
-                            <p className="text-xs text-gray-300">Municipio</p>
-                            <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">Recife</p>
-                        </div>
-                        <div className="ml-12">
-                            <p className="text-xs text-gray-300">Bairro</p>
-                            <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">Centro</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center mt-3">
-                        <div className>
-                            <p className="text-xs text-gray-300">Rua</p>
-                            <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">Rua Exemplo</p>
-                        </div>
-                        <div className="ml-12">
-                            <p className="text-xs text-gray-300">Nª</p>
-                            <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">31</p>
-                        </div>
+                    <div className="inline-grid grid-rows-2 justify-start">
+                      <div className=" items-center mt-3 inline-grid grid-cols-2">
+                          <div>
+                              <p className="text-xs text-gray-300">
+                                Municipio
+                              </p>
+                              <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
+                                {endereco.municipio}
+                              </p>
+                          </div>
+                          <div className="ml-12">
+                              <p className="text-xs text-gray-300">
+                                Bairro
+                              </p>
+                              <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
+                                {endereco.nomeBairro}
+                              </p>
+                          </div>
+                      </div>
+                      <div className="inline-grid grid-cols-2 items-center mt-3 w-full">
+                          <div>
+                              <p className="text-xs text-gray-300">
+                                Rua
+                              </p>
+                              <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
+                                {endereco.rua}
+                              </p>
+                          </div>
+                          <div className="ml-12">
+                              <p className="text-xs text-gray-300">
+                                Nª
+                              </p>
+                              <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
+                                {endereco.numero}
+                              </p>
+                          </div>
+                      </div>
                     </div>
                 </div>
             </div>
