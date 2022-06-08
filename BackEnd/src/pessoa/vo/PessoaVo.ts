@@ -1,3 +1,5 @@
+import EnderecoVo from "./EnderecoVo";
+
 class PessoaVo
 {
     public codigoPessoa : number = 0;
@@ -7,6 +9,7 @@ class PessoaVo
     public login : string = "";
     public senha : string = "";
     public status : number = 0;
+    public enderecos : EnderecoVo[] = [];
 }
 
 export default PessoaVo;

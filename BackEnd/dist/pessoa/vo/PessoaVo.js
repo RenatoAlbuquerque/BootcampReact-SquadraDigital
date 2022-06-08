@@ -9,6 +9,7 @@ class PessoaVo {
         this.login = "";
         this.senha = "";
         this.status = 0;
+        this.enderecos = [];
     }
 }
 exports.default = PessoaVo;

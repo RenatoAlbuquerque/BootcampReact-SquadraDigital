@@ -26,7 +26,7 @@ class MunicipioDao extends AbstractDao_1.default {
         try {
             const sql = 'UPDATE TB_MUNICIPIO SET CODIGO_UF = :codigoUF, NOME = :nome, STATUS = :status  WHERE CODIGO_MUNICIPIO = :codigoMunicipio';
             resultado = await this.conexao.execute(sql, [municipioVo.codigoUF, municipioVo.nome, municipioVo.status, municipioVo.codigoMunicipio]);
-            console.log('QUANTIDADE DE REGISTROS ALTERADOS: ' + resultado.rowsAffected);
+            console.log('QUANTIDADE DE REGISTROS ALTERADOS (MUNICÍPIO): ' + resultado.rowsAffected);
             if (resultado.rowsAffected == 0) {
                 throw new AlterarError_1.default("município", "Não existe município com o código " + municipioVo.codigoMunicipio, 404, null);
             }
@@ -46,7 +46,7 @@ class MunicipioDao extends AbstractDao_1.default {
             let sql = recursos[0]; //sql
             let parametros = recursos[1]; //parametros
             let resultSet = await this.conexao.execute(sql, parametros);
-            console.log('QUANTIDADE DE REGISTROS ENCONTRADOS: ' + resultSet.rows.length);
+            console.log('QUANTIDADE DE REGISTROS ENCONTRADOS (MUNICÍPIO): ' + resultSet.rows.length);
             let retorno = (resultSet.rows.length == 1 ? this.buscarUmRegistro(resultSet) : this.buscarVariosRegistros(resultSet));
             return retorno;
         }

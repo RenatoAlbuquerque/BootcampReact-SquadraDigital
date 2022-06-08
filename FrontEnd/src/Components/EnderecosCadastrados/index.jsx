@@ -5,8 +5,10 @@ import CardDetalheEndereco from '../CardDetalheEndereco'
 const EnderecosCadastrados = () => {
 	const {
 			modalDetalheEndereco, 
-			setModalDetalheEndereco,
 			listaEnderecos,
+			enderecoEditar,
+			setEnderecoEditar,
+			setModalDetalheEndereco,
 			setListaEnderecos
 	} = useContext(pessoaContext);
 	const [infoModalEndereco, setInfoModalEndereco] = useState({})
@@ -19,6 +21,12 @@ const EnderecosCadastrados = () => {
 	const abrirModalDetalheEndereco = (endereco) => {
 		setModalDetalheEndereco(true)
 		setInfoModalEndereco(endereco)
+	}
+
+	
+	const editarEndereco = (enderecoAtual) => {
+		removerEndereco(enderecoAtual)
+		setEnderecoEditar(enderecoAtual)
 	}
 	
 	return (
@@ -34,12 +42,12 @@ const EnderecosCadastrados = () => {
 							<table className="w-full whitespace-nowrap">
 									<tbody className="w-full">
 										{listaEnderecos.map((endereco)=>(
-											<tr key={endereco.index} className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-300 border-b border-t border-gray-100">
+											<tr key={`${endereco.cep}${endereco.numero}`} className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-300 border-b border-t border-gray-100">
 													<td className="pl-4 cursor-pointer gap-2">
 															<div className="flex items-center">
 																	<div className="pl-4">
 																			<p className="text-xs leading-3 text-gray-600 pt-2">Rua</p>
-																			<p className="mt-2 font-medium">{endereco.rua}</p>
+																			<p className="mt-2 font-medium">{endereco.rua || endereco.nomeRua}</p>
 																	</div>
 															</div>
 															<div className="flex items-center">
@@ -59,7 +67,7 @@ const EnderecosCadastrados = () => {
 															<div className="flex items-center">
 																	<div className="pl-4">
 																			<p className="text-xs leading-3 text-gray-600 pt-2">Bairro</p>
-																			<p className="mt-2 font-medium">{endereco.nomeBairro}</p>
+																			<p className="mt-2 font-medium">{endereco.nomeBairro || endereco.bairro.nome}</p>
 																	</div>
 															</div>
 													</td>
@@ -67,13 +75,13 @@ const EnderecosCadastrados = () => {
 															<div className="flex items-center">
 																	<div className="pl-4">
 																			<p className="text-xs leading-3 text-gray-600 pt-2">Cidade</p>
-																			<p className="mt-2 font-medium">{endereco.municipio}</p>
+																			<p className="mt-2 font-medium">{endereco.municipio || endereco.bairro.municipio.nome}</p>
 																	</div>
 															</div>
 															<div className="flex items-center">
 																	<div className="pl-4">
 																			<p className="text-xs leading-3 text-gray-600 pt-2">UF</p>
-																			<p className="mt-2 font-medium">{endereco.nomeUf}</p>
+																			<p className="mt-2 font-medium">{endereco.nomeUf || endereco.bairro.municipio.uf.nome}</p>
 																	</div>
 															</div>
 													</td>
@@ -86,9 +94,11 @@ const EnderecosCadastrados = () => {
 																	</button>
 															</div>
 															<div className="flex items-center">
-																	<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="orange" strokeWidth="2">
-																			<path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-																	</svg>
+																	<button onClick={() => editarEndereco(endereco)}>
+																		<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="orange" strokeWidth="2">
+																				<path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+																		</svg>
+																	</button>
 															</div>
 															<div className="flex items-center">
 																<button onClick={() => removerEndereco(endereco)}>

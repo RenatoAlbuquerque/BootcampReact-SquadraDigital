@@ -13,15 +13,16 @@ export { default as FormEditarMunicipio } from "./FormEditarMunicipio";
 export { default as FormRegistroBairro } from "./FormRegistroBairro";
 export { default as FormEditarBairro } from "./FormEditarBairro";
 
+export { default as FormEditarPessoaEndereco } from "./FormEditarPessoaEndereco";
 export { default as FormRegistroPessoaEndereco } from "./FormRegistroPessoaEndereco";
+
 //Listas de Renderização
 export { default as ListaUF } from "./ListaUF";
 export { default as ListaMUNICIPIO } from "./ListaMUNICIPIO";
 export { default as ListaBAIRRO } from "./ListaBAIRRO";
-
 export { default as ListaPESSOA } from "./ListaPESSOA";
 
-
+//Helpers de Cadastro
 export { default as EnderecosCadastrados } from "./EnderecosCadastrados";
 export { default as CardDetalheEndereco } from "./CardDetalheEndereco";
 

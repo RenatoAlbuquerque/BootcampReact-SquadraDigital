@@ -82,12 +82,6 @@ class PessoaController
                 pessoaVoFiltroPesquisa.status = parseInt(''+status);
             }
             registros = await pessoaBe.pesquisarPessoa(pessoaVoFiltroPesquisa);
-           // if(status != undefined && registros.codigoPessoa != undefined)
-           // {
-           //     let lista = [];
-            //    lista.push(registros);
-             //   registros = lista;
-           // }
             return response.status(200).json(registros);
         }
         catch(error)

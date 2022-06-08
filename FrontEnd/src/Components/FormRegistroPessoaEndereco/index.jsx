@@ -6,15 +6,19 @@ import schemaEndereco from "./registerFormSchemaEndereco";
 import BtnSalvar from "../BtnSalvar";
 import { UfContext } from "../../Contexts/ufContext";
 import { api } from "../../Services/api";
-import { pessoaContext } from "../../Contexts/pessoasContext";
+import { pessoaContext } from "../../Contexts/pessoasContext"; 
+import { useNavigate } from 'react-router-dom';
+
 
 const FormRegistroPessoaEndereco = () => {
   const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
   const {setListaEnderecos} = useContext(pessoaContext)
+  const [enderecoEnvio, setEnderecoEnvio] = useState([])
   const [municipiosSelect, setMunicipiosSelect] = useState([])
   const [bairrosSelect, setBairrosSelect] = useState([])
+  const navigate = useNavigate()
 
-  
+
   useEffect(()=>(
     pegarTodasUfs
   ),[])
@@ -37,27 +41,52 @@ const FormRegistroPessoaEndereco = () => {
     }
   }
 
-  const registrarPessoa = async (values, actions) => {
+  const registrarPessoa = async (values, { resetForm }) => {
     values.status = parseInt(values.status)
-    console.log(values);
+    values.enderecos = enderecoEnvio
+    const infoPessoaEnderecos = {
+      nome: values.nome,
+      sobrenome: values.sobrenome,
+      idade: values.idade,
+      login: values.login,
+      senha: values.senha,
+      status: values.status,
+      enderecos: enderecoEnvio
+    }
+    try {
+      await api.post("/pessoa",infoPessoaEnderecos)
+      resetForm({ values: ''})
+      setListaEnderecos(null)
+      navigate('/pessoaslista')
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const registrarEndereco = async (values,  { resetForm }) => {
     const [uf] = listaUfRenderizada?.filter((uf) => uf.codigoUF === parseInt(values.codigoUF))
     const [municipio] = municipiosSelect?.filter((municipio) => municipio.codigoMunicipio === parseInt(values.codigoMunicipio))
     const [bairro] = bairrosSelect?.filter((bairro) => bairro.codigoBairro === parseInt(values.codigoBairro))
-    const payload = {
+    const enderecoLista = {
       uf: uf.sigla,
       nomeUf: uf.nome,
       municipio: municipio.nome,
       codigoBairro: parseInt(values.codigoBairro),
       nomeBairro: bairro.nome,
-      rua: values.rua,
-      numero: parseInt(values.numero),
-      complemento: values.complemento,
+      rua: values.nomeRua.toUpperCase(),
+      numero: values.numero,
+      complemento: values.complemento.toUpperCase(),
+      cep: values.cep
     }
-    
-    setListaEnderecos(listaEnderecos => [...listaEnderecos, payload])
+    const enderecoEnvio = {
+      codigoBairro: parseInt(values.codigoBairro),
+      nomeRua: values.nomeRua.toUpperCase(),
+      numero: values.numero,
+      complemento: values.complemento.toUpperCase(),
+      cep: values.cep
+    }
+    setEnderecoEnvio(listaEnderecos => [...listaEnderecos, enderecoEnvio])
+    setListaEnderecos(listaEnderecos => [...listaEnderecos, enderecoLista])
     resetForm({ values: ''})
   };
 
@@ -80,6 +109,7 @@ const FormRegistroPessoaEndereco = () => {
               login: "",
               senha: "",
               idade: "",
+              enderecos: []
             }}
           >
             {({ errors, touched, isValid, handleChange, handleBlur }) => (
@@ -196,13 +226,14 @@ const FormRegistroPessoaEndereco = () => {
             validationSchema={schemaEndereco}
             onSubmit={registrarEndereco}
             initialValues={{
-              rua: "",
+              nomeRua: "",
               numero: "",
               complemento: "",
+              cep: "",
               codigoUF: ""
             }}
           >
-            {({ errors, touched, isValid, handleChange, handleBlur }) => (
+            {() => (
               <Form className="flex items-end gap-5">
                 {/* 1ª C0LUNA */}
                 <div >
@@ -211,7 +242,7 @@ const FormRegistroPessoaEndereco = () => {
                     <div>
                       <p className="text-white font-bold">Rua</p>
                       <Field
-                        name="rua"
+                        name="nomeRua"
                         type="text"
                         className=" rounded-lg  appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                       />
@@ -226,7 +257,7 @@ const FormRegistroPessoaEndereco = () => {
                     <p className="text-white font-bold">Número</p>
                       <Field
                         name="numero"
-                        type="number"
+                        type="text"
                         className=" rounded-lg  appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                       />
                     </div>
@@ -309,10 +340,22 @@ const FormRegistroPessoaEndereco = () => {
                       <ErrorMessage name="codigoBairro" />
                     </span>
                   </div>
-                  
                 </div>
-
+                {/* 3ª C0LUNA */}
                 <div className="flex flex-col">
+                  <div className="flex flex-col mb-5">
+                    <div>
+                    <p className="text-white font-bold">CEP</p>
+                      <Field
+                        name="cep"
+                        type="text"
+                        className=" rounded-lg  appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                      />
+                    </div>
+                      <span className="spanValidateForm">
+                        <ErrorMessage name="cep" />
+                      </span>
+                  </div> 
                   <button 
                     type="submit"
                     className="font-bold uppercase rounded-lg  appearance-none border  py-2.5 px-4 bg-white text-gray-700  shadow-sm text-base hover:bg-gray-900 hover:text-white">

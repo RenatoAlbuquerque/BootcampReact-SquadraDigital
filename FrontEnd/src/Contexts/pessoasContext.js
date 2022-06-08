@@ -4,11 +4,12 @@ import { api } from "../Services/api";
 export const pessoaContext = createContext({});
 
 export const PessoaProvider = ({ children }) => {
-  const [modalDetalheEndereco, setModalDetalheEndereco] = useState(false);
   const [listaEnderecos, setListaEnderecos] = useState([]);
-
   const [listaPessoas, setListaPessoas] = useState([]);
-  const [modalDetalhePessoa, setModalDetalhePessoa] = useState(true);
+  const [modalDetalheEndereco, setModalDetalheEndereco] = useState(false);
+  const [modalDetalhePessoa, setModalDetalhePessoa] = useState(false);
+  const [pessoaEditar, setPessoaEditar] = useState(null);
+  const [enderecoEditar, setEnderecoEditar] = useState(null);
 
   const listarTodasPessoas = async () => {
     try {
@@ -33,6 +34,12 @@ export const PessoaProvider = ({ children }) => {
         listarTodasPessoas,
         listaPessoas,
         setListaPessoas,
+
+        pessoaEditar,
+        setPessoaEditar,
+
+        enderecoEditar,
+        setEnderecoEditar,
       }}
     >
       {children}

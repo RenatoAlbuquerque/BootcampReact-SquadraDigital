@@ -26,7 +26,7 @@ class BairroDao extends AbstractDao_1.default {
         try {
             const sql = 'UPDATE TB_BAIRRO SET CODIGO_MUNICIPIO = :codigoMunicipio, NOME = :nome, STATUS = :status  WHERE CODIGO_BAIRRO = :codigoBairro';
             resultado = await this.conexao.execute(sql, [bairroVo.codigoMunicipio, bairroVo.nome, bairroVo.status, bairroVo.codigoBairro]);
-            console.log('QUANTIDADE DE REGISTROS ALTERADOS: ' + resultado.rowsAffected);
+            console.log('QUANTIDADE DE REGISTROS ALTERADOS (BAIRROS): ' + resultado.rowsAffected);
             if (resultado.rowsAffected == 0) {
                 throw new AlterarError_1.default("bairro", "Não existe bairro com o código " + bairroVo.codigoBairro, 404, null);
             }
@@ -46,7 +46,7 @@ class BairroDao extends AbstractDao_1.default {
             let sql = recursos[0]; //sql
             let parametros = recursos[1]; //parametros
             let resultSet = await this.conexao.execute(sql, parametros);
-            console.log('QUANTIDADE DE REGISTROS ENCONTRADOS: ' + resultSet.rows.length);
+            console.log('QUANTIDADE DE REGISTROS ENCONTRADOS (BAIRROS): ' + resultSet.rows.length);
             let retorno = (resultSet.rows.length == 1 ? this.buscarUmRegistro(resultSet) : this.buscarVariosRegistros(resultSet));
             return retorno;
         }

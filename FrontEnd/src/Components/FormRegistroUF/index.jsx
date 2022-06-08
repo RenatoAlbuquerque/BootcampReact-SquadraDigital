@@ -9,7 +9,7 @@ import { UfContext } from "../../Contexts/ufContext";
 const FormRegistroUF = () => {
   const {pegarTodasUfs} = useContext(UfContext)
 
-  const enviarRegistro = async (values, { resetForm }) => {
+  const enviarRegistroUf = async (values, { resetForm }) => {
     values.nome = values.nome.toUpperCase()
     values.sigla = values.sigla.toUpperCase()
     values.status = parseInt(values.status)
@@ -32,7 +32,7 @@ const FormRegistroUF = () => {
             <div>
               <Formik
                 validationSchema={schema}
-                onSubmit={enviarRegistro}
+                onSubmit={enviarRegistroUf}
                 initialValues={{
                   nome: '',
                   sigla: '',

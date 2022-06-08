@@ -24,7 +24,7 @@ const CardDetalheEndereco = ({endereco}) => {
     }
   }
   useEffect(()=>(
-    backgroundCardEndereco(endereco.uf)
+    backgroundCardEndereco(endereco.uf || endereco.bairro.municipio.uf.sigla)
   ),[])
     return (
         <div className="backdrop" onClick={() => setModalDetalheEndereco(false)}>
@@ -34,7 +34,7 @@ const CardDetalheEndereco = ({endereco}) => {
                         <div className="flex flex-col items-center">
                             <img src={bandeiraEstadoUf} alt="profile" />
                             <p className="mt-2 text-base sm:text-sm md:text-base font-semibold text-center text-white">
-                              {endereco.nomeUf}
+                              {endereco.nomeUf || endereco.bairro.municipio.uf.nome}
                             </p>
                         </div>
                     </div>
@@ -45,7 +45,7 @@ const CardDetalheEndereco = ({endereco}) => {
                                 Municipio
                               </p>
                               <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
-                                {endereco.municipio}
+                                {endereco.municipio || endereco.bairro.municipio.nome}
                               </p>
                           </div>
                           <div className="ml-12">
@@ -53,7 +53,7 @@ const CardDetalheEndereco = ({endereco}) => {
                                 Bairro
                               </p>
                               <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
-                                {endereco.nomeBairro}
+                                {endereco.nomeBairro || endereco.bairro.nome}
                               </p>
                           </div>
                       </div>
@@ -63,7 +63,7 @@ const CardDetalheEndereco = ({endereco}) => {
                                 Rua
                               </p>
                               <p className="mt-2 text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-50">
-                                {endereco.rua}
+                                {endereco.rua || endereco.nomeRua}
                               </p>
                           </div>
                           <div className="ml-12">

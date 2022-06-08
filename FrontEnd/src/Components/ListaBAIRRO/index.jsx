@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { bairroContext } from "../../Contexts/bairroContext";
+import { UfContext } from "../../Contexts/ufContext";
 import { api } from "../../Services/api";
 import { codigoMunicipioParaBairro } from "../Utils/listaBairro";
 
@@ -9,19 +10,17 @@ const ListaBAIRRO = () => {
     setBairros,
     listaMunicipios,
     pegarTodosBairros } = useContext(bairroContext)
+  const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
   const [pesquisaBairro, setPesquisaBairro] = useState(0)
+  const [municipiosSelect, setMunicipiosSelect] = useState([])
 
+    
   useEffect(()=> { 
+    pegarTodasUfs()
     pegarTodosBairros()
   },[])
 
-  const deletarBairro = async (bairro) => {
-    try {
-      await api.delete(`/bairro/${bairro.id}`);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
 
   const alterarStatus = async (bairro) => {
     try {
@@ -82,6 +81,15 @@ const ListaBAIRRO = () => {
     }
   };
 
+  const gerarMunicipios = async (codigoUF) => {
+    try {
+      const { data } = await api.get(`/municipio?codigoUF=${codigoUF}`);
+      setMunicipiosSelect(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
     return (
       <div className="w-full sm:px-6">
           <div className="px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
@@ -91,12 +99,12 @@ const ListaBAIRRO = () => {
           </div>
           <p className="mt-5 sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">Listar Por Filtros</p>
         <div className="flex gap-10">
-          <div className="flex justify-start items-center py-2 relative w-2/6">
+          <div className="flex justify-start items-center py-2 relative w-3/5">
             <input
-            type="text"
-            onChange={(e) => setPesquisaBairro(e.target.value)}
-            className="text-sm leading-none text-left text-gray-600 px-4 py-3 border rounded border-gray-300  outline-none w-full"
-            placeholder="Pesquise pelo Código do Bairro."
+              type="text"
+              onChange={(e) => setPesquisaBairro(e.target.value)}
+              className="text-sm leading-none text-left text-gray-600 px-4 py-3 border rounded border-gray-300  outline-none w-full"
+              placeholder="Pesquise pelo Código do Bairro."
             />
             <button onClick={()=>filtrarPorMunicipioCodigoBairro(pesquisaBairro)} className="absolute right-3 z-10 cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -104,11 +112,24 @@ const ListaBAIRRO = () => {
               </svg>
             </button>
           </div>
-          <div className="cursor-pointer flex justify-start items-center py-2 relative w-3/5">
+          <div className="cursor-pointer flex justify-start items-center py-2 relative w-2/5">
+            <div className="relative ">
+              <select onClick={(e)=>gerarMunicipios(e.target.value)} className="block appearance-none w-full bg-transparent border border-gray-200  py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option className="text-gray-600" value={0}>Selecionar UF</option>
+                {listaUfRenderizada.map((uf)=> (
+                  <option key={uf.codigoUF} value={uf.codigoUF}>{uf.nome}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none  absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
+          </div>
+          <div className="cursor-pointer flex justify-start items-center py-2 relative w-2/5">
             <div className="relative ">
               <select onClick={(e)=>pesquisarPorCodigoMunicipio(e.target.value)} className="block appearance-none w-full bg-transparent border border-gray-200  py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                 <option className="text-gray-600" value={0}>Pesquisar por Municípios</option>
-                {listaMunicipios.map((uf)=> (
+                {municipiosSelect.map((uf)=> (
                   <option key={uf.codigoMunicipio} value={uf.codigoMunicipio}>{uf.nome}</option>
                 ))}
               </select>
@@ -117,7 +138,7 @@ const ListaBAIRRO = () => {
               </div>
             </div>
           </div>
-          <div className="cursor-pointer flex justify-start items-center py-2 relative w-1/3">
+          <div className="cursor-pointer flex justify-start items-center py-2 relative w-3/5">
             <div className="relative ">
               <select onClick={(e)=>pesquisarPorStatus(e.target.value)} className="block appearance-none w-full bg-transparent border border-gray-200  py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                 <option className="text-gray-600" value={0}>Pesquise por Status</option>
@@ -178,13 +199,6 @@ const ListaBAIRRO = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                   </svg>
                                 </button>
-                                <button  
-                                onClick={() => deletarBairro(bairro)}
-                                title={'Clique para EXCLUIR'}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                                </button>
                               </div>
                           </td>                          
                       </tr>
@@ -217,13 +231,6 @@ const ListaBAIRRO = () => {
                                 <button title='Clique para EDITAR' onClick={() => setBairroAtual(bairro)}>
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer text-orange-500 " fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                </button>
-                                <button 
-                                  onClick={() => deletarBairro(bairro)}
-                                  title='Clique para EXCLUIR'>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                   </svg>
                                 </button>
                               </div>

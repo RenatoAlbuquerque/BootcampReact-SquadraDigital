@@ -35,6 +35,7 @@ export const BairroProvider = ({ children }) => {
         bairros,
         setBairros,
         listaMunicipios,
+        setListaMunicipios,
       }}
     >
       {children}

@@ -26,7 +26,7 @@ class UFDao extends AbstractDao_1.default {
         try {
             const sql = 'UPDATE TB_UF SET SIGLA = :sigla, NOME = :nome, STATUS = :status  WHERE CODIGO_UF = :codigoUF';
             resultado = await this.conexao.execute(sql, [ufVo.sigla, ufVo.nome, ufVo.status, ufVo.codigoUF]);
-            console.log('QUANTIDADE DE REGISTROS ALTERADOS: ' + resultado.rowsAffected);
+            console.log('QUANTIDADE DE REGISTROS ALTERADOS (UFs): ' + resultado.rowsAffected);
             if (resultado.rowsAffected == 0) {
                 throw new AlterarError_1.default("UF", "Não existe UF com o código " + ufVo.codigoUF, 404, null);
             }
@@ -46,7 +46,7 @@ class UFDao extends AbstractDao_1.default {
             let sql = recursos[0]; //sql
             let parametros = recursos[1]; //parametros
             let resultSet = await this.conexao.execute(sql, parametros);
-            console.log('QUANTIDADE DE REGISTROS ENCONTRADOS: ' + resultSet.rows.length);
+            console.log('QUANTIDADE DE REGISTROS ENCONTRADOS (UFs): ' + resultSet.rows.length);
             let retorno = (resultSet.rows.length == 1 ? this.buscarUmRegistro(resultSet) : this.buscarVariosRegistros(resultSet));
             return retorno;
         }
