@@ -1,17 +1,32 @@
-import React,{useContext, useState} from "react";
+import React,{useContext, useEffect, useState} from "react";
 import { pessoaContext } from "../../Contexts/pessoasContext";
+import { api } from "../../Services/api";
 import CardDetalheEndereco from '../CardDetalheEndereco'
 
 const EnderecosCadastrados = () => {
 	const {
 			modalDetalheEndereco, 
 			listaEnderecos,
-			enderecoEditar,
 			setEnderecoEditar,
 			setModalDetalheEndereco,
-			setListaEnderecos
+			setListaEnderecos,
+			pessoaEditar
 	} = useContext(pessoaContext);
 	const [infoModalEndereco, setInfoModalEndereco] = useState({})
+
+	useEffect(()=>{
+		const infoPessoaEditar = async () => {
+			if(pessoaEditar){
+				try {
+					const { data } = await api.get(`/pessoa?codigoPessoa=${pessoaEditar.codigoPessoa}`);
+          setListaEnderecos(data.enderecos)
+        } catch (error) {
+					console.log(error);
+        }
+			}
+    }
+    infoPessoaEditar()
+	},[])
 
 	const removerEndereco = (enderecoAtual) => {
 		const novaLista = listaEnderecos.filter((endereco) => endereco !== enderecoAtual)
@@ -23,12 +38,11 @@ const EnderecosCadastrados = () => {
 		setInfoModalEndereco(endereco)
 	}
 
-	
 	const editarEndereco = (enderecoAtual) => {
 		removerEndereco(enderecoAtual)
 		setEnderecoEditar(enderecoAtual)
 	}
-	
+	console.log('lista de endereço',listaEnderecos)
 	return (
 		<>
 			<div className="w-full sm:px-6">

@@ -8,7 +8,6 @@ const ListaBAIRRO = () => {
   const {setBairroAtual, 
     bairros, 
     setBairros,
-    listaMunicipios,
     pegarTodosBairros } = useContext(bairroContext)
   const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
   const [pesquisaBairro, setPesquisaBairro] = useState(0)
@@ -89,6 +88,7 @@ const ListaBAIRRO = () => {
       console.log(error);
     }
   }
+
 
     return (
       <div className="w-full sm:px-6">

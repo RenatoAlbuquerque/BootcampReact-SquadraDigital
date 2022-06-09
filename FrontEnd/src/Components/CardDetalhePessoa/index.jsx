@@ -38,7 +38,7 @@ const listarUmaPessoa = async () => {
               <div className="flex items-start justify-between w-full">
                 <div className="pl-3 w-full">
                   <p className="text-xl font-medium leading-5 text-gray-800">
-										{infoPessoaModal.nome} {infoPessoaModal.sobrenome}
+										{infoPessoaModal.nome} {infoPessoaModal.sobrenome} - <span>{infoPessoaModal.status === 1 ? 'ATIVADO' : 'DESATIVADO'}</span>
 									</p>
                   <p className="text-sm leading-normal pt-2 text-gray-500">Login: {infoPessoaModal.login} | Senha: {infoPessoaModal.senha} | Idade: {infoPessoaModal.idade}</p>
                 </div>
@@ -98,11 +98,6 @@ const listarUmaPessoa = async () => {
 															</div>
 													</td>
 													<td className="flex flex-col cursor-pointer gap-2 mt-3">
-															<div className="flex items-center">
-																	<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="orange" strokeWidth="2">
-																			<path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-																	</svg>
-															</div>
 															<div className="flex items-center">
 																	<div>
 																			<p className="text-xs leading-3 text-gray-600 pt-2">CEP</p>

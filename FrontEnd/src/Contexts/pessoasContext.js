@@ -10,6 +10,9 @@ export const PessoaProvider = ({ children }) => {
   const [modalDetalhePessoa, setModalDetalhePessoa] = useState(false);
   const [pessoaEditar, setPessoaEditar] = useState(null);
   const [enderecoEditar, setEnderecoEditar] = useState(null);
+  const [modalEditarEnderecoAtual, setModalEditarenderecoAtual] =
+    useState(false);
+  const [enderecoEnvio, setEnderecoEnvio] = useState([]);
 
   const listarTodasPessoas = async () => {
     try {
@@ -40,6 +43,12 @@ export const PessoaProvider = ({ children }) => {
 
         enderecoEditar,
         setEnderecoEditar,
+
+        modalEditarEnderecoAtual,
+        setModalEditarenderecoAtual,
+
+        enderecoEnvio,
+        setEnderecoEnvio,
       }}
     >
       {children}

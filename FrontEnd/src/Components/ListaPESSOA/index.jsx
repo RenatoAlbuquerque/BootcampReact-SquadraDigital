@@ -13,10 +13,9 @@ const ListaPESSOA = () => {
   const [infoModalPessoa, setInfoModalPessoa] = useState({})
   const navigate = useNavigate()
 
-
-  useEffect(()=>(
-    listarTodasPessoas
-  ),[])
+  useEffect(()=>{
+    listarTodasPessoas()
+  },[])
 
   const editarPessoaEndereco = (pessoa) => {
     setPessoaEditar(pessoa)

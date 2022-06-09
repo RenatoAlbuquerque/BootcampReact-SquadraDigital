@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../style.css";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import schema from "./registerFormSchema";
@@ -6,16 +6,29 @@ import BtnSalvar from "../BtnSalvar";
 import { api } from "../../Services/api";
 import { municipioContext } from "../../Contexts/municipioContext";
 import { bairroContext } from "../../Contexts/bairroContext";
+import { UfContext } from "../../Contexts/ufContext";
 
 
 
 const FormRegistroBairro = () => {
-  const {pegarTodosMunicipios, listaMunicipiosRenderizada} = useContext(municipioContext);
+  const {pegarTodosMunicipios} = useContext(municipioContext);
   const {pegarTodosBairros} = useContext(bairroContext)
+  const {listaUfRenderizada} = useContext(UfContext)
+  const [municipiosSelect, setMunicipiosSelect] = useState([])
+
   
   useEffect(()=> {
     pegarTodosMunicipios()
   },[])
+
+  const gerarMunicipios = async (codigoUF) => {
+    try {
+      const { data } = await api.get(`/municipio?codigoUF=${codigoUF}`);
+      setMunicipiosSelect(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
 
   const enviarRegistroDeBairro = async (values,  { resetForm }) => {
@@ -63,6 +76,32 @@ const FormRegistroBairro = () => {
                   </span>
                 </div>
                 <div className="flex flex-col">
+                      <div>
+                        <p className="text-white font-bold">UF</p>
+                        <Field
+                          onClick={(e) => gerarMunicipios(parseInt(e.target.value))}
+                          component="select"
+                          name="codigoUF"
+                          className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                        >
+                          <option>SELECIONE</option>
+                          {listaUfRenderizada ? 
+                            listaUfRenderizada.map((uf)=>(
+                              <option 
+                              key={uf.codigoUF} 
+                              value={parseInt(uf.codigoUF)}
+                              >
+                                {uf.nome}
+                              </option>
+                            ))
+                          : null}
+                        </Field>
+                      </div>
+                        <span className="spanValidateForm">
+                          <ErrorMessage name="idUF" />
+                        </span>
+                    </div>
+                <div className="flex flex-col">
                   <div>
                     <p className="text-white font-bold">Município</p>
                     <Field
@@ -70,9 +109,9 @@ const FormRegistroBairro = () => {
                       name="codigoMunicipio"
                       className="cursor-pointer rounded-lg border border-gray-300 w-full py-2.5 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                     >
-                      <option>SELECIONE</option>
-                      {listaMunicipiosRenderizada ? 
-                        listaMunicipiosRenderizada.map((uf)=>(
+                      <option value={0}>SELECIONE</option>
+                      {municipiosSelect ? 
+                        municipiosSelect.map((uf)=>(
                           <option 
                           key={uf.codigoMunicipio} 
                           value={parseInt(uf.codigoMunicipio)}
