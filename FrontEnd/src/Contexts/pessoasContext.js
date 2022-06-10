@@ -9,7 +9,10 @@ export const PessoaProvider = ({ children }) => {
   const [modalDetalheEndereco, setModalDetalheEndereco] = useState(false);
   const [modalDetalhePessoa, setModalDetalhePessoa] = useState(false);
   const [pessoaEditar, setPessoaEditar] = useState(null);
+
   const [enderecoEditar, setEnderecoEditar] = useState(null);
+  const [enderecoEditadoAtual, setEnderecoEditadoAtual] = useState(false);
+
   const [modalEditarEnderecoAtual, setModalEditarenderecoAtual] =
     useState(false);
   const [enderecoEnvio, setEnderecoEnvio] = useState([]);
@@ -49,6 +52,9 @@ export const PessoaProvider = ({ children }) => {
 
         enderecoEnvio,
         setEnderecoEnvio,
+
+        enderecoEditadoAtual,
+        setEnderecoEditadoAtual,
       }}
     >
       {children}

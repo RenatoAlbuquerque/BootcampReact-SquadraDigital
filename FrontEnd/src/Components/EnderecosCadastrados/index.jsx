@@ -10,7 +10,9 @@ const EnderecosCadastrados = () => {
 			setEnderecoEditar,
 			setModalDetalheEndereco,
 			setListaEnderecos,
-			pessoaEditar
+			pessoaEditar,
+			enderecoEditar
+
 	} = useContext(pessoaContext);
 	const [infoModalEndereco, setInfoModalEndereco] = useState({})
 
@@ -39,16 +41,19 @@ const EnderecosCadastrados = () => {
 	}
 
 	const editarEndereco = (enderecoAtual) => {
-		removerEndereco(enderecoAtual)
-		setEnderecoEditar(enderecoAtual)
+			if(!enderecoEditar){
+				removerEndereco(enderecoAtual)
+				setEnderecoEditar(enderecoAtual)
+			}
 	}
-	console.log('lista de endereço',listaEnderecos)
 	return (
 		<>
 			<div className="w-full sm:px-6">
 					<div className="px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
 							<div className="sm:flex items-center justify-center">
-									<p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">ENDEREÇOS A SEREM CADASTRADOS</p>
+									<p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+										ENDEREÇOS A SEREM CADASTRADOS
+									</p>
 							</div>
 					</div>
 					<div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
@@ -107,13 +112,15 @@ const EnderecosCadastrados = () => {
 																			</svg>
 																	</button>
 															</div>
-															<div className="flex items-center">
+															{endereco.codigoEndereco ? (
+																<div className="flex items-center">
 																	<button onClick={() => editarEndereco(endereco)}>
 																		<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="orange" strokeWidth="2">
 																				<path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
 																		</svg>
 																	</button>
 															</div>
+																): null}
 															<div className="flex items-center">
 																<button onClick={() => removerEndereco(endereco)}>
 																	<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="red" strokeWidth="2">

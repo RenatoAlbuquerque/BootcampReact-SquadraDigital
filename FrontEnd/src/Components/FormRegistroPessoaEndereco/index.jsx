@@ -248,7 +248,7 @@ const FormRegistroPessoaEndereco = () => {
                       />
                     </div>
                     <span className="spanValidateForm">
-                      <ErrorMessage name="rua" />
+                      <ErrorMessage name="nomeRua" />
                     </span>
                   </div>
                   {/* NÚMERO */}

@@ -7,6 +7,7 @@ import { api } from "../../Services/api";
 import { pessoaContext } from "../../Contexts/pessoasContext"; 
 import { useNavigate } from 'react-router-dom';
 import FormEditarEndereco from "../FormEditarEndereco";
+import schemaEndereco from "./registerFormSchemaEndereco";
 
 const FormEditarPessoaEndereco = () => {
   const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
@@ -18,6 +19,7 @@ const FormEditarPessoaEndereco = () => {
   const [municipiosSelect, setMunicipiosSelect] = useState([])
   const [bairrosSelect, setBairrosSelect] = useState([])
   const navigate = useNavigate()
+  const [msg, setMsg] = useState(false)
   
   useEffect(()=>{
     const infoPessoaEditar = async () => {
@@ -25,7 +27,9 @@ const FormEditarPessoaEndereco = () => {
         try {
           const { data } = await api.get(`/pessoa?codigoPessoa=${pessoaEditar.codigoPessoa}`);
           setPessoaEditar(data)
-          setListaEnderecos(data.enderecos)
+          if(!enderecoEditar){
+            setListaEnderecos(data.enderecos)
+          }
         } catch (error) {
           console.log(error);
         }
@@ -53,21 +57,11 @@ const FormEditarPessoaEndereco = () => {
     }
   }
 
-  const editarListaEndereco =(endereco) => {
-    for(var i=0; i < endereco.length; i++){
-      delete endereco[i].bairro
-      delete endereco[i].nomeBairro
-      delete endereco[i].nomeUf
-      delete endereco[i].uf
-      delete endereco[i].municipio
-    }
 
-    return endereco
-  }
 
   const editarPessoa = async (values, { resetForm }) => {
     values.status = parseInt(values.status)
-    const alterarListaEnderecoEnvio = editarListaEndereco(listaEnderecos)
+    const alterarListaEnderecoEnvio = listaEnderecos
       const infoEditarPessoa = {
         codigoPessoa: pessoaEditar.codigoPessoa,
         nome: values.nome,
@@ -79,10 +73,14 @@ const FormEditarPessoaEndereco = () => {
         enderecos: alterarListaEnderecoEnvio
       }
       try {
-        await api.put("/pessoa",infoEditarPessoa)
-        resetForm({ values: ''})
-        setPessoaEditar(null)
-        navigate('/pessoaslista')
+          if(!enderecoEditar){
+          await api.put("/pessoa",infoEditarPessoa)
+          resetForm({ values: ''})
+          setPessoaEditar(null)
+          navigate('/pessoaslista')
+        }else{
+          setMsg(true)
+        }
       } catch (error) {
         console.log(error);
       }
@@ -110,14 +108,13 @@ const FormEditarPessoaEndereco = () => {
     resetForm({ values: ''})
   };
 
-  console.log(enderecoEditar, 'endereco')
 
 
   return (
     <>
       {pessoaEditar && (
         <div className="mt-4">
-      {/* FORM CRIAR PESSOA */}
+      {/* FORM EDITAR PESSOA */}
           <div className="flex flex-col  items-center shadow-2xl px-4 py-4 bg-gray-700">
             <h1 className="font-sans text-4xl font-bold text-white mb-10">
               EDITAR PESSOA
@@ -247,6 +244,7 @@ const FormEditarPessoaEndereco = () => {
             </h1>
             <div className="flex">
               <Formik
+                validationSchema={schemaEndereco}
                 onSubmit={registrarEndereco}
                 initialValues={{
                   nomeRua: "",
@@ -271,7 +269,7 @@ const FormEditarPessoaEndereco = () => {
                           />
                         </div>
                         <span className="spanValidateForm">
-                          <ErrorMessage name="rua" />
+                          <ErrorMessage name="nomeRua" />
                         </span>
                       </div>
                       {/* NÚMERO */}
@@ -393,7 +391,11 @@ const FormEditarPessoaEndereco = () => {
             </div>
           </div>
         ):(
-          <FormEditarEndereco/>
+          <>
+            {msg === true ? <p className="font-sans text-center text-lg font-bold text-red-600 mb-5">Para salvar, conclua a alteração do Endereço!!</p> : null}
+
+            <FormEditarEndereco/>
+          </>
         )}
         </div>
       )}

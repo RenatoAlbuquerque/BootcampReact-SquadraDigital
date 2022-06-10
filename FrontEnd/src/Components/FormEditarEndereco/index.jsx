@@ -4,15 +4,17 @@ import { UfContext } from "../../Contexts/ufContext";
 import { pessoaContext } from "../../Contexts/pessoasContext";
 import { api } from "../../Services/api";
 import '../style.css'
+import schemaEndereco from './registerFormSchemaEndereco';
 
-const FormEditarEndereco = () => {
+
+const FormEditarEndereco = ({setMsgErroEditarEndereco}) => {
   const {listaUfRenderizada, pegarTodasUfs} = useContext(UfContext)
   const {
     setListaEnderecos, 
     pessoaEditar, 
     enderecoEditar,
     setPessoaEditar,
-    setEnderecoEditar
+    setEnderecoEditar,
    } = useContext(pessoaContext)
     const [municipiosSelect, setMunicipiosSelect] = useState([])
     const [bairrosSelect, setBairrosSelect] = useState([])
@@ -20,7 +22,6 @@ const FormEditarEndereco = () => {
     useEffect(()=>(
       infoPessoaEditar
     ),[])
-      
     const infoPessoaEditar = async () => {
       await pegarTodasUfs()
       try {
@@ -48,7 +49,6 @@ const FormEditarEndereco = () => {
         console.log(error);
       }
     }
-  
     const registrarEndereco = (values,  { resetForm }) => {
       const enderecoEditavel = {
         codigoEndereco: enderecoEditar.codigoEndereco,
@@ -60,12 +60,10 @@ const FormEditarEndereco = () => {
         nomeRua: values.nomeRua,
         numero: values.numero,
       }
-      
-      setEnderecoEditar(null)
-      setListaEnderecos(listaEnderecos => [...listaEnderecos, enderecoEditavel])
-      resetForm({ values: ''})
-    };
-
+        setListaEnderecos(listaEnderecos => [...listaEnderecos, enderecoEditavel])
+        resetForm({ values: ''})
+        setEnderecoEditar(null)
+      };
   return(
       <div className="mt-10 flex flex-col  items-center shadow-2xl px-4 py-4 bg-gray-700">
                 <h1 className="font-sans text-2xl font-bold text-white mb-5">
@@ -73,6 +71,7 @@ const FormEditarEndereco = () => {
                 </h1>
                 <div className="flex">
                   <Formik
+                    validationSchema={schemaEndereco}
                     onSubmit={registrarEndereco}
                     initialValues={{
                       nomeRua: enderecoEditar.nomeRua,
@@ -165,7 +164,7 @@ const FormEditarEndereco = () => {
                             >
                                 <option>SELECIONE</option>
                               {municipiosSelect.map((uf)=>(
-                                <option  key={uf.codigoMunicipio} value={parseInt(uf.codigoMunicipio)} >{uf.nome}</option>
+                                <option  key={uf.codigoMunicipio} value={uf.codigoMunicipio} >{uf.nome}</option>
                               ))}
                             </Field>
                             </div>
